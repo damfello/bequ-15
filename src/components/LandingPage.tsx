@@ -13,7 +13,7 @@ export default function LandingPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Navigate function
+  // Navigate function. New Comment
   const navigateToLogin = () => {
     router.push('/login');
   };
