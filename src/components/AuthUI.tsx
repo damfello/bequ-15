@@ -1,23 +1,23 @@
-'use client'; // VERY IMPORTANT: Mark this as a Client Component
+'use client';
 
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { supabase } from '@/lib/supabaseClient'; // Use the shared client-side instance
+import { supabase } from '@/lib/supabaseClient';
 
 export default function AuthUI() {
-  // Determine the redirect URL based on the environment variable or window location
   const redirectTo = typeof window !== 'undefined'
-    ? `${window.location.origin}/auth/callback` // Use current origin in browser
-    : 'http://localhost:3000/auth/callback'; // Fallback for SSR/initial load (adjust if needed)
+    ? `${window.location.origin}/auth/callback`
+    : 'http://localhost:3000/auth/callback';
 
   return (
-    // Render ONLY the Supabase Auth component
     <Auth
-        supabaseClient={supabase} // Pass the CLIENT-SIDE client
-        appearance={{ theme: ThemeSupa }} // Use Supabase's default theme
-        theme="light" // Or "dark" - set based on where it's used, or make it a prop
-        providers={['google', 'github']} // Optional: Add social providers if configured
-        redirectTo={redirectTo} // Important for social logins/email confirms
+        supabaseClient={supabase}
+        appearance={{ theme: ThemeSupa }}
+        theme="light"
+        // --- MODIFIED providers prop ---
+        providers={[]} // Add 'Google' providers={['google']} 
+        // --- END MODIFIED providers prop ---
+        redirectTo={redirectTo}
         localization={{
            variables: {
              sign_in: { email_label: 'Email address', password_label: 'Your Password'},
@@ -25,6 +25,5 @@ export default function AuthUI() {
            }
         }}
      />
-     // Removed the surrounding text and Plan Details from here
   );
 }
