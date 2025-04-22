@@ -41,7 +41,7 @@ export default function LandingPage() {
           </h1>
           {/* Sub-headline */}
           <p className="text-lg md:text-xl text-blue-200 mb-10 max-w-3xl mx-auto">
-             Get instant clarity on FDA & MDR regulations. BeQu interprets complex compliance documents to provide quick, accurate answers tailored to your needs.
+             Get instant clarity on medical device regulations. BeQu interprets complex compliance documents to provide quick, accurate answers tailored to your needs.
           </p>
           {/* CTA Button */}
           <button onClick={() => handleScrollTo('pricing')} className="bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold px-8 py-3 rounded-md transition duration-150 shadow-lg mb-16"> View Plan Details </button>
@@ -92,7 +92,7 @@ export default function LandingPage() {
             {/* Pricing Card */}
             <div className="bg-gray-900/80 rounded-lg shadow-2xl p-8 backdrop-blur-md border border-gray-700 transform transition duration-300 hover:scale-[1.02]">
                <h3 className="text-xl font-semibold mb-2 text-center text-blue-100">Monthly Standard</h3>
-               <p className="text-4xl font-bold my-3 text-center text-white">€20 <span className="text-lg font-normal text-blue-200">/ month</span></p>
+               <p className="text-4xl font-bold my-3 text-center text-white">€35 <span className="text-lg font-normal text-blue-200">/ month</span></p>
                <ul className="space-y-3 my-6 text-blue-100 text-sm">
                   <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to FDA/MDR Knowledge Base</li>
                   <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Advanced AI Question Answering</li>
