@@ -49,9 +49,9 @@ export default function LandingPage() {
           <div className="bg-gray-900/60 border border-blue-700/50 rounded-lg shadow-xl p-4 pt-8 relative max-w-2xl mx-auto text-left text-sm">
              <div className="absolute top-2 left-3 flex space-x-1.5"> <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div> <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div> <div className="w-2.5 h-2.5 rounded-full bg-green-500/50"></div> </div>
              <div className='space-y-3'>
-                 <div className="flex justify-end"> <div className="bg-blue-600 text-white px-3 py-1.5 rounded-lg rounded-br-none max-w-[70%]"> How Can I classify a Medical device? </div> </div>
+                 <div className="flex justify-end"> <div className="bg-blue-600 text-white px-3 py-1.5 rounded-lg rounded-br-none max-w-[70%]"> How can I classify a medical device? </div> </div>
                  <div className="flex justify-start"> <div className="bg-gray-700 text-blue-100 px-3 py-1.5 rounded-lg rounded-bl-none max-w-[70%]"> To classify a medical device according to MDR (EU) 2017/745, you need to consider its intended purpose... [more details] </div> </div>
-                 <div className="flex justify-end"> <div className="bg-blue-600 text-white px-3 py-1.5 rounded-lg rounded-br-none max-w-[70%]"> What are the rules for classifying? </div> </div>
+                 <div className="flex justify-end"> <div className="bg-blue-600 text-white px-3 py-1.5 rounded-lg rounded-br-none max-w-[70%]"> What are the classification rules? </div> </div>
                  <div className="flex justify-start"> <div className="bg-gray-700 text-blue-300 italic px-3 py-1.5 rounded-lg rounded-bl-none max-w-[70%]"> Looking up MDR Annex VIII classification rules... </div> </div>
              </div>
           </div>
