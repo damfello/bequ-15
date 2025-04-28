@@ -67,7 +67,7 @@ export default function LandingPage() {
             <div className="bg-white/10 p-6 rounded-lg text-center backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15">
                <FiBookOpen className="text-blue-400 text-4xl mb-4 mx-auto"/>
                <h3 className="text-xl font-semibold mb-2">Regulatory Knowledge</h3>
-               <p className="text-blue-200 text-sm leading-relaxed">Access up-to-date guidance from FDA and MDR regulations. Our AI is trained to interpret complex compliance documents for quick, accurate answers.</p>
+               <p className="text-blue-200 text-sm leading-relaxed">Access updated guidance on official medical regulations. Our AI is trained to interpret complex compliance documents for quick, accurate answers.</p>
             </div>
             {/* Feature 2 */}
             <div className="bg-white/10 p-6 rounded-lg text-center backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15">
@@ -94,7 +94,7 @@ export default function LandingPage() {
                <h3 className="text-xl font-semibold mb-2 text-center text-blue-100">Monthly Standard</h3>
                <p className="text-4xl font-bold my-3 text-center text-white">€35 <span className="text-lg font-normal text-blue-200">/ month</span></p>
                <ul className="space-y-3 my-6 text-blue-100 text-sm">
-                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to FDA/MDR Knowledge Base</li>
+                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to MDR Knowledge Base</li>
                   <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Advanced AI Question Answering</li>
                   <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Secure & Private Chats</li>
                   <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Cancel Anytime</li>
