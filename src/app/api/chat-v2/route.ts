@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
         const headersToN8n: HeadersInit = {
             'Content-Type': 'application/json',
             [n8nAuthHeaderName]: n8nAuthHeaderValue,
+            'X-Supabase-Auth': req.headers.get('Authorization') || '',
         };
           // ==========================================================
         // ===== AÑADE ESTA LÍNEA PARA VER EL TOKEN QUE SE ENVÍA ====
