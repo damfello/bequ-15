@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
       mode: 'subscription',
       success_url: success_url,
       cancel_url: cancel_url,
+      allow_promotion_codes: true,
       // Use the securely validated user ID
       client_reference_id: user.id,
       // Use the securely validated user email
