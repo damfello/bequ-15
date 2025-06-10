@@ -56,13 +56,7 @@ export async function POST(req: NextRequest) {
 
         console.log(`Forwarding chat request to n8n for session ${sessionId}`);
         const n8nResponse = await fetch(n8nWebhookUrl, { method: 'POST', headers: headersToN8n, body: JSON.stringify(n8nPayload) });
-        // =================================================================
-        // =========== AÑADE ESTAS TRES LÍNEAS PARA DEPURAR ================
-        console.log(`Respuesta de n8n - Status: ${n8nResponse.status}`);
-        const responseBodyText = await n8nResponse.clone().text(); // Clonamos para poder leer el cuerpo dos veces
-        console.log(`Respuesta de n8n - Cuerpo (raw): "${responseBodyText}"`);
-        // =================================================================
-
+      
         if (!n8nResponse.ok) {
             const errorText = await n8nResponse.text();
             console.error(`n8n webhook failed with status ${n8nResponse.status}: ${errorText}`);
