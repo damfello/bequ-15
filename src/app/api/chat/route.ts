@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
             [n8nAuthHeaderName]: n8nAuthHeaderValue,
         };
 
-        console.log(`Forwarding chat request to n8n for session ${sessionId}`);
+        //console.log(`Forwarding chat request to n8n for session ${sessionId}`);
+        console.log(`PRUEBA DE DESPLIEGUE - v3 - El cambio sí llegó. Timestamp: ${new Date().toISOString()}`);
         const n8nResponse = await fetch(n8nWebhookUrl, { method: 'POST', headers: headersToN8n, body: JSON.stringify(n8nPayload) });
         // =================================================================
         // =========== AÑADE ESTAS TRES LÍNEAS PARA DEPURAR ================
