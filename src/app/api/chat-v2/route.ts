@@ -53,6 +53,10 @@ export async function POST(req: NextRequest) {
             'Content-Type': 'application/json',
             [n8nAuthHeaderName]: n8nAuthHeaderValue,
         };
+          // ==========================================================
+        // ===== AÑADE ESTA LÍNEA PARA VER EL TOKEN QUE SE ENVÍA ====
+        console.log('VERCEL-LOG: Token enviado a n8n:', req.headers.get('Authorization'));
+        // ==========================================================
 
         console.log(`Forwarding chat request to n8n for session ${sessionId}`);
         const n8nResponse = await fetch(n8nWebhookUrl, { method: 'POST', headers: headersToN8n, body: JSON.stringify(n8nPayload) });
