@@ -23,7 +23,7 @@ export default function LandingPage() {
       {/* Navigation Bar */}
       <nav className="w-full p-4 sticky top-0 z-50 bg-blue-950/80 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <span className="text-xl font-bold tracking-tight">BeQu AI</span>
+          <span className="text-xl font-bold tracking-tight">BeQu | Medical Regulations AI Assistant</span>
           <div className="space-x-4 md:space-x-6 flex items-center">
             <button onClick={() => handleScrollTo('features')} className="text-sm md:text-base text-blue-200 hover:text-white transition duration-150">Features</button>
             <button onClick={() => handleScrollTo('pricing')} className="text-sm md:text-base text-blue-200 hover:text-white transition duration-150">Pricing</button>
