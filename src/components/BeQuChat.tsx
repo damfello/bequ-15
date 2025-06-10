@@ -78,8 +78,8 @@ export default function BeQuChat() {
      try {
        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
        if (sessionError || !session?.access_token) throw new Error(sessionError?.message || 'User session/token not found.');
-
-       const response = await fetch('/api/chat', {
+// ruta modificada, de nuevo a api/chat
+       const response = await fetch('/api/chat-v2', {
          method: 'POST',
          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
          body: JSON.stringify({ sessionId: chatSessionId, chatInput: messageText }),
