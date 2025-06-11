@@ -43,7 +43,7 @@ export default function BeQuChat() {
   useEffect(() => {
     const newSessionId = uuidv4();
     setChatSessionId(newSessionId);
-    setMessages([{ id: uuidv4(), sender: 'llm', text: 'Hello! Ask me anything about medical device regulations (FDA, MDR).' }]);
+    setMessages([{ id: uuidv4(), sender: 'llm', text: 'Hi, I am BeQu! I can help you resolve questions about medical device regulations in Europe.' }]);
   }, []);
 
   // Auto-scroll message area
