@@ -73,7 +73,6 @@ export default function DashboardSidebar({
           {/* Refresh Button */}
           <SidebarItem onClick={onRefresh} disabled={isLoadingSubscription} icon={<FiRefreshCw className="h-4 w-4"/>} isLoading={isLoadingSubscription}> Refresh Status </SidebarItem>
           {/* Manage Subscription Button */}
-          {isSubscriptionActive && ( <SidebarItem onClick={onManageSubscription} disabled={isLoadingPortal} icon={<FiSettings className="h-4 w-4"/>} isLoading={isLoadingPortal}> Manage Subscription </SidebarItem> )}
        </nav>
 
        {/* ... Logout Button section remains the same ... */}

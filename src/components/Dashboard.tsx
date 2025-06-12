@@ -18,7 +18,6 @@ export default function Dashboard({ session }: DashboardProps) {
     const [subscription, setSubscription] = useState<Subscription>(null);
     const [loadingSubscription, setLoadingSubscription] = useState(true);
     const [isSubscribing, setIsSubscribing] = useState(false);
-    const [isPortalLoading, setIsPortalLoading] = useState(false);
 
     const fetchSubscription = useCallback(async () => {
         if (session?.user) {
@@ -87,24 +86,6 @@ export default function Dashboard({ session }: DashboardProps) {
          fetchSubscription();
      }, [fetchSubscription]);
 
-     const handleManageSubscription = useCallback(async () => {
-          if (!session?.access_token) { alert("Could not verify user session. Please log in again."); return; }
-          setIsPortalLoading(true);
-          try {
-             const response = await fetch('/api/portal_sessions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}`, }});
-             if (!response.ok) { const errorText = await response.text(); throw new Error(errorText || `API Error: ${response.statusText}`);}
-             const data = await response.json();
-             if (!data?.portalUrl) { throw new Error('Could not retrieve customer portal URL.');}
-             window.location.href = data.portalUrl;
-          // Ignore potentially incorrect unused 'error' reporting by linter
-          } catch (error) {
-              console.error('Error redirecting to customer portal:', error); // Error IS used here
-              const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
-              alert(`Error managing subscription: ${errorMessage}`);
-              setIsPortalLoading(false);
-          }
-     }, [session?.access_token]);
-
     const isActiveSubscriber = !!subscription;
 
     return (
@@ -113,9 +94,7 @@ export default function Dashboard({ session }: DashboardProps) {
             userEmail={session.user.email!}
             isSubscriptionActive={isActiveSubscriber}
             isLoadingSubscription={loadingSubscription}
-            isLoadingPortal={isPortalLoading}
             onRefresh={handleRefresh}
-            onManageSubscription={handleManageSubscription}
           />
           <div className="flex-grow p-6 lg:p-8 overflow-y-auto">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 lg:p-8 min-h-full flex flex-col">
