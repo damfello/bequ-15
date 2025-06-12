@@ -2,7 +2,7 @@
 
 import React from 'react';
 import LogoutButton from './LogoutButton';
-import { FiRefreshCw, FiSettings, FiCheckCircle, FiXCircle, FiLoader } from 'react-icons/fi'; // Removed unused FiLogOut
+import { FiRefreshCw, FiCheckCircle, FiXCircle, FiLoader } from 'react-icons/fi';
 
 // --- DEFINE PROPS TYPE FOR SidebarItem ---
 type SidebarItemProps = {
@@ -13,14 +13,14 @@ type SidebarItemProps = {
   isLoading?: boolean;
 };
 
-// Reusable Sidebar Item component - Uses the separate type now
+// Reusable Sidebar Item component
 const SidebarItem = ({
   onClick,
   disabled,
   icon,
   children,
   isLoading
-}: SidebarItemProps) => ( // <-- Use SidebarItemProps here
+}: SidebarItemProps) => (
     <button
         onClick={onClick}
         disabled={disabled || isLoading}
@@ -35,24 +35,20 @@ const SidebarItem = ({
 // --- END SidebarItem DEFINITION ---
 
 
-// Props for the main DashboardSidebar component (no changes here)
+// Props for the main DashboardSidebar component (updated)
 interface DashboardSidebarProps {
   userEmail: string;
   isSubscriptionActive: boolean;
   isLoadingSubscription: boolean;
-  isLoadingPortal: boolean;
   onRefresh: () => void;
-  onManageSubscription: () => void;
 }
 
-// Main component function (no changes here)
+// Main component function (updated)
 export default function DashboardSidebar({
   userEmail,
   isSubscriptionActive,
   isLoadingSubscription,
-  isLoadingPortal,
   onRefresh,
-  onManageSubscription,
 }: DashboardSidebarProps) {
 
   return (
@@ -72,8 +68,7 @@ export default function DashboardSidebar({
           </div>
           {/* Refresh Button */}
           <SidebarItem onClick={onRefresh} disabled={isLoadingSubscription} icon={<FiRefreshCw className="h-4 w-4"/>} isLoading={isLoadingSubscription}> Refresh Status </SidebarItem>
-          {/* Manage Subscription Button */}
-          {isSubscriptionActive && ( <SidebarItem onClick={onManageSubscription} disabled={isLoadingPortal} icon={<FiSettings className="h-4 w-4"/>} isLoading={isLoadingPortal}> Manage Subscription </SidebarItem> )}
+          {/* Manage Subscription Button has been removed */}
        </nav>
 
        {/* ... Logout Button section remains the same ... */}
