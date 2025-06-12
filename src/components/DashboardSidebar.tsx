@@ -2,7 +2,7 @@
 
 import React from 'react';
 import LogoutButton from './LogoutButton';
-import { FiRefreshCw, FiSettings, FiCheckCircle, FiXCircle, FiLoader } from 'react-icons/fi'; // Removed unused FiLogOut
+import { FiRefreshCw, FiCheckCircle, FiXCircle, FiLoader } from 'react-icons/fi'; // Removed unused FiLogOut and FiSettings
 
 // --- DEFINE PROPS TYPE FOR SidebarItem ---
 type SidebarItemProps = {
@@ -40,9 +40,7 @@ interface DashboardSidebarProps {
   userEmail: string;
   isSubscriptionActive: boolean;
   isLoadingSubscription: boolean;
-  isLoadingPortal: boolean;
   onRefresh: () => void;
-  onManageSubscription: () => void;
 }
 
 // Main component function (no changes here)
@@ -50,9 +48,7 @@ export default function DashboardSidebar({
   userEmail,
   isSubscriptionActive,
   isLoadingSubscription,
-  isLoadingPortal,
   onRefresh,
-  onManageSubscription,
 }: DashboardSidebarProps) {
 
   return (

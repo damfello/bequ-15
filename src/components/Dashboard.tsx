@@ -42,7 +42,7 @@ export default function Dashboard({ session }: DashboardProps) {
             setSubscription(null);
             setLoadingSubscription(false);
         }
-    }, [session?.user?.id]);
+    }, [session?.user, session?.user?.id]); // session.user added here
 
     useEffect(() => {
         fetchSubscription();
