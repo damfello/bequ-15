@@ -129,7 +129,7 @@ export default function BeQuChat() {
             <div
               className={`px-3 py-2 rounded-lg max-w-[75%] shadow-sm ${
                 message.sender === 'user'
-                  ? 'bg-blue-600 text-white rounded-br-none' // User bubble style
+                  ? 'bg-blue-100 text-blue-900 rounded-br-none' // User bubble style
                   : 'bg-gray-200 text-gray-900 rounded-bl-none' // LLM bubble style
               }`}
             >
