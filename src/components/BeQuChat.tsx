@@ -18,7 +18,7 @@ const UserAvatar = () => (
   </div>
 );
 const BeQuAvatar = () => (
-    // Using a blue inspired by BQS logo theme
+  // Using a blue inspired by BQS logo theme
   <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs text-white font-semibold">
     BQ {/* Placeholder */}
   </div>
@@ -51,55 +51,55 @@ export default function BeQuChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-   // Adjust textarea height dynamically (basic example)
-   useEffect(() => {
-     if (inputRef.current) {
-       inputRef.current.style.height = 'auto'; // Reset height
-       inputRef.current.style.height = `${inputRef.current.scrollHeight}px`; // Set to scroll height
-     }
-   }, [currentInput]);
+  // Adjust textarea height dynamically (basic example)
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto'; // Reset height
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`; // Set to scroll height
+    }
+  }, [currentInput]);
 
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-     setCurrentInput(event.target.value);
+    setCurrentInput(event.target.value);
   };
 
 
   const handleSendMessage = async (event?: FormEvent<HTMLFormElement>) => {
-     if (event) { event.preventDefault(); }
-     const messageText = currentInput.trim();
-     if (!messageText || isLoading || !chatSessionId) return;
+    if (event) { event.preventDefault(); }
+    const messageText = currentInput.trim();
+    if (!messageText || isLoading || !chatSessionId) return;
 
-     const userMessage: Message = { id: uuidv4(), sender: 'user', text: messageText };
-     setMessages((prev) => [...prev, userMessage]);
-     setCurrentInput('');
-     setIsLoading(true);
+    const userMessage: Message = { id: uuidv4(), sender: 'user', text: messageText };
+    setMessages((prev) => [...prev, userMessage]);
+    setCurrentInput('');
+    setIsLoading(true);
 
-     try {
-       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-       if (sessionError || !session?.access_token) throw new Error(sessionError?.message || 'User session/token not found.');
-// ruta modificada, de nuevo a api/chat
-       const response = await fetch('/api/chat', {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
-         body: JSON.stringify({ sessionId: chatSessionId, chatInput: messageText }),
-       });
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session?.access_token) throw new Error(sessionError?.message || 'User session/token not found.');
+      // ruta modificada, de nuevo a api/chat
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+        body: JSON.stringify({ sessionId: chatSessionId, chatInput: messageText }),
+      });
 
-       if (!response.ok) { const errorText = await response.text(); throw new Error(errorText || `API Error: ${response.statusText}`); }
-       const data = await response.json();
-       if (typeof data.output === 'undefined') throw new Error('Invalid response format from chat API.');
+      if (!response.ok) { const errorText = await response.text(); throw new Error(errorText || `API Error: ${response.statusText}`); }
+      const data = await response.json();
+      if (typeof data.output === 'undefined') throw new Error('Invalid response format from chat API.');
 
-       const llmMessage: Message = { id: uuidv4(), sender: 'llm', text: data.output };
-       setMessages((prev) => [...prev, llmMessage]);
-     } catch (error) {
-       console.error('Error sending chat message:', error);
-       const errorMessage: Message = { id: uuidv4(), sender: 'llm', text: `Sorry, an error occurred: ${error instanceof Error ? error.message : 'Unknown error'}` };
-       setMessages((prev) => [...prev, errorMessage]);
-     } finally {
-       setIsLoading(false);
-       // Refocus input after sending/receiving
-       inputRef.current?.focus();
-     }
+      const llmMessage: Message = { id: uuidv4(), sender: 'llm', text: data.output };
+      setMessages((prev) => [...prev, llmMessage]);
+    } catch (error) {
+      console.error('Error sending chat message:', error);
+      const errorMessage: Message = { id: uuidv4(), sender: 'llm', text: `Sorry, an error occurred: ${error instanceof Error ? error.message : 'Unknown error'}` };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+      // Refocus input after sending/receiving
+      inputRef.current?.focus();
+    }
   };
 
   // Handle Enter key press (Shift+Enter for newline)
@@ -135,7 +135,7 @@ export default function BeQuChat() {
             >
               {/* Render paragraphs for newlines */}
               {message.text.split('\n').map((line, index) => (
-                  <p key={index} className={index > 0 ? 'mt-1' : ''}>{line || '\u00A0'}</p> // Render empty lines too
+                <p key={index} className={index > 0 ? 'mt-1' : ''}>{line || '\u00A0'}</p> // Render empty lines too
               ))}
             </div>
 
@@ -145,41 +145,42 @@ export default function BeQuChat() {
         ))}
 
         {/* Loading Indicator */}
-         {isLoading && (
-            <div className="flex items-end gap-2 justify-start">
-                <BeQuAvatar />
-                <div className="px-3 py-2 rounded-lg max-w-[75%] bg-gray-200 text-gray-500 italic shadow-sm rounded-bl-none">
-                   BeQu is thinking...
-                </div>
+        {isLoading && (
+          <div className="flex items-end gap-2 justify-start">
+            <BeQuAvatar />
+            <div className="px-3 py-2 rounded-lg max-w-[75%] bg-gray-200 text-gray-500 italic shadow-sm rounded-bl-none">
+              BeQu is thinking...
             </div>
-         )}
-         {/* Scroll Anchor */}
+          </div>
+        )}
+        {/* Scroll Anchor */}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input Area */}
       <div className="border-t p-3 bg-gray-100">
-         <form onSubmit={handleSendMessage} className="flex items-end space-x-2">
-            <textarea
-              ref={inputRef}
-              value={currentInput}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown} // Handle Enter key
-              placeholder="Ask BeQu about FDA/MDR..."
-              disabled={isLoading}
-              className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-200 resize-none overflow-hidden max-h-28" // Basic styling, allow resize? no. basic auto-height
-              rows={1} // Start with 1 row
-              required
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !currentInput.trim()}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-1 focus:ring-blue-500 shrink-0" // shrink-0 prevents button squishing
-              aria-label="Send message"
-            >
-              <SendIcon />
-            </button>
-         </form>
+        <form onSubmit={handleSendMessage} className="flex items-end space-x-2">
+          <textarea
+            ref={inputRef}
+            value={currentInput}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown} // Handle Enter key
+            placeholder="Ask BeQu about FDA/MDR..."
+            disabled={isLoading}
+            // AQUI ESTÁ EL CAMBIO: Se añadió 'text-gray-900' para el color del texto
+            className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-200 resize-none overflow-hidden max-h-28 text-gray-900" // Se añadió text-gray-900
+            rows={1} // Start with 1 row
+            required
+          />
+          <button
+            type="submit"
+            disabled={isLoading || !currentInput.trim()}
+            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-1 focus:ring-blue-500 shrink-0" // shrink-0 prevents button squishing
+            aria-label="Send message"
+          >
+            <SendIcon />
+          </button>
+        </form>
       </div>
     </div>
   );
