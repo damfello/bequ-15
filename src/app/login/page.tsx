@@ -47,11 +47,11 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         {/* Título principal */}
         <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-4">
-          Welcome to BeQu
+          Welcome to BeQu Beta
         </h1>
         {/* Texto descriptivo más grande y con énfasis */}
         <p className="text-lg sm:text-xl text-center text-gray-600 mb-8 leading-relaxed">
-          Unlock instant answers and expert guidance on **medical device regulations** in Europe. <br/> Sign in or create your account to get started.
+          Unlock instant answers and expert guidance on medical device regulations in Europe. <br/> Sign in or create your account to get started.
         </p>
 
         {/* Render the AuthUI component */}
