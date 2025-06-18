@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js'; // Import standard createClient
+import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
 
 // Initialize Stripe (using the specific apiVersion your types require)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-03-31.basil', // Use the specific version required by your types
+  apiVersion: '2025-03-31.basil', // Usa la versión específica requerida por tus tipos
   typescript: true,
 });
 
@@ -13,32 +13,31 @@ const priceId = process.env.STRIPE_PRICE_ID || '';
 
 // Securely verify the user's Access Token
 async function validateUser(req: NextRequest) {
-    const token = req.headers.get('Authorization')?.split('Bearer ')[1];
+  const token = req.headers.get('Authorization')?.split('Bearer ')[1];
 
-    if (!token) {
-        throw new Error('Missing Authorization Header');
-    }
+  if (!token) {
+    throw new Error('Missing Authorization Header');
+  }
 
-    // Create Supabase Admin Client (requires Service Role Key)
-    // Ensure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are in .env.local
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Create Supabase Admin Client (requires Service Role Key)
+  // Ensure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are in .env.local
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!supabaseUrl || !serviceKey) {
-        throw new Error('Server misconfiguration: Supabase URL or Service Role Key missing.');
-    }
+  if (!supabaseUrl || !serviceKey) {
+    throw new Error('Server misconfiguration: Supabase URL or Service Role Key missing.');
+  }
 
-    const supabaseAdmin = createClient(supabaseUrl, serviceKey);
-    const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+  const supabaseAdmin = createClient(supabaseUrl, serviceKey);
+  const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
 
-    if (error || !user) {
-        throw new Error('Invalid or expired token.');
-    }
+  if (error || !user) {
+    throw new Error('Invalid or expired token.');
+  }
 
-    // Return the validated user
-    return user;
+  // Return the validated user
+  return user;
 }
-
 
 export async function POST(req: NextRequest) {
   // Ensure Stripe keys are set
@@ -67,15 +66,25 @@ export async function POST(req: NextRequest) {
       mode: 'subscription',
       success_url: success_url,
       cancel_url: cancel_url,
-      allow_promotion_codes: true,
-      // Use the securely validated user ID
+      allow_promotion_codes: true, // Permitir códigos de promoción
+
+      // --- CAMBIOS SUGERIDOS PARA LA PRUEBA GRATUITA SIN TARJETA ---
+      // 1. Indicar a Stripe que solo pida el método de pago si es estrictamente necesario
+      payment_method_collection: 'if_required',
+      // 2. Definir un período de prueba de 30 días para la suscripción
+      subscription_data: {
+        trial_period_days: 30, // 30 días de prueba gratuita
+      },
+      // --- FIN DE LOS CAMBIOS SUGERIDOS ---
+
+      // Usar el ID de usuario validado de forma segura
       client_reference_id: user.id,
-      // Use the securely validated user email
+      // Usar el correo electrónico de usuario validado de forma segura
       customer_email: user.email,
     });
 
     if (!checkoutSession?.id) {
-       throw new Error('Could not create Stripe Checkout Session');
+        throw new Error('Could not create Stripe Checkout Session');
     }
 
     // 4. Return the session ID
