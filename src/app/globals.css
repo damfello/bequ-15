@@ -28,6 +28,6 @@ body {
 /* Custom styles for the "Sign up" link in Supabase Auth UI */
 /* Targeting the specific class and the href attribute for precision */
 .supabase-auth-ui_ui-anchor[href="#auth-sign-up"] {
-  font-size: 1.1em !important; /* Adjust this value (e.g., 1.2em, 16px, 18px) for desired size */
-  font-weight: bold !important; /* Makes the text bold */
+  font-size: 1.3em !important; /* AHORA MÁS GRANDE - AJUSTA ESTE VALOR */
+  font-weight: bold !important;
 }

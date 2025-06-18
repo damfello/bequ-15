@@ -1,3 +1,4 @@
+// AuthUI.tsx
 'use client';
 
 import { Auth } from '@supabase/auth-ui-react';
@@ -11,19 +12,23 @@ export default function AuthUI() {
 
   return (
     <Auth
-        supabaseClient={supabase}
-        appearance={{ theme: ThemeSupa }}
-        theme="light"
-        // --- MODIFIED providers prop ---
-        providers={[]} // Add 'Google' providers={['google']} 
-        // --- END MODIFIED providers prop ---
-        redirectTo={redirectTo}
-        localization={{
-           variables: {
-             sign_in: { email_label: 'Email address', password_label: 'Your Password'},
-             sign_up: { email_label: 'Email address', password_label: 'Create a Password'},
-           }
-        }}
-     />
+      supabaseClient={supabase}
+      appearance={{ theme: ThemeSupa }}
+      theme="light"
+      providers={[]}
+      redirectTo={redirectTo}
+      localization={{
+        variables: {
+          sign_in: {
+            email_label: 'Email address',
+            password_label: 'Your Password',
+            // --- CAMBIO AQUÍ para el texto del enlace ---
+            link_text: "If you don't have an account yet, sign up at this link."
+            // --- FIN CAMBIO ---
+          },
+          sign_up: { email_label: 'Email address', password_label: 'Create a Password'},
+        }
+      }}
+    />
   );
 }
