@@ -40,16 +40,16 @@ const AccordionItem = ({ question, answer, index }: { question: string, answer: 
 // Contenido para la sección de FAQ
 const faqContent = [
   {
-    question: "¿Cuál es la diferencia entre BeQu y otras herramientas populares como ChatGPT/Gemini?",
-    answer: "Son grandes modelos generalistas entrenados con bases de datos masivas, capaces de resolver cualquier tipo de tarea. BeQu se especializa únicamente en la regulación de dispositivos médicos, lo que le permite reducir significativamente el riesgo de alucinaciones. En términos médicos, BeQu es un médico especialista, mientras que los modelos más grandes son entrenados como médicos de cabecera."
+    question: "What's the difference between BeQu and other popular tools like ChatGPT/Gemini, among others?",
+    answer: "There are large generalist models trained with massive databases, capable of solving any type of task. BeQu specializes solely in medical device regulations, which allows it to significantly reduce the risk of hallucinations. In medical terms, BeQu is a medical specialist, while the larger models are trained with general practitioners."
   },
   {
-    question: "¿Cuál es la diferencia entre los planes Estándar y Plus?",
-    answer: "El plan Estándar de BeQu tiene acceso a un número limitado de regulaciones, 6 en total. El plan Plus te permite acceder a un total de 10 documentos regulatorios completamente actualizados."
+    question: "What is the difference between the Standard and Plus plans?",
+    answer: "The BeQu Standard plan has access to a limited number of regulations, 6 in total. The Plus plan allows you to access a total of 10 fully updated regulatory documents."
   },
   {
-    question: "¿Qué tanto puedo confiar en la información que proporciona BeQu?",
-    answer: "BeQu tiene acceso a una base de datos controlada de documentos oficiales de regulación médica, lo que nos permite proporcionarte información fiable directamente de la fuente. Sin embargo, BeQu es una empresa centrada en facilitar tu acceso a la información. En ningún momento BeQu reemplaza el juicio de un profesional. BeQu te permite entender el complejo mundo de las regulaciones médicas."
+    question: "How much can I trust the information BeQu provides?",
+    answer: "BeQu has access to a controlled database of official medical regulation documents, allowing us to provide you with reliable information directly from the source. However, BeQu is a company focused on facilitating your access to information. However, at no point does BeQu replace the judgment of a professional. BeQu allows you to understand the complex world of medical regulations."
   }
 ];
 
