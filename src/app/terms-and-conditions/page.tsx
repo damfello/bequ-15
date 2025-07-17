@@ -29,10 +29,10 @@ export default function TermsAndConditionsPage() {
 
         {/* Sección de contenido con fondo blanco y texto oscuro */}
         <section className="bg-white p-8 rounded-lg shadow-xl mb-8"> {/* Fondo blanco */}
-          <p className="text-gray-700 leading-relaxed mb-4"> {/* Texto gris oscuro */}
-            Welcome to BeQu (the "App"), operated by Best Quality Solutions GmbH, located at Kieselstraße 6 D-51371 Leverkusen, Germany ("we", "us", or "our"). These Terms and Conditions ("Terms") govern your access to and use of the BeQu app and its services.
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Welcome to BeQu (the &quot;App&quot;), operated by Best Quality Solutions GmbH, located at Kieselstraße 6 D-51371 Leverkusen, Germany (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;). These Terms and Conditions (&quot;Terms&quot;) govern your access to and use of the BeQu app and its services.
           </p>
-          <p className="text-gray-700 leading-relaxed mb-6"> {/* Texto gris oscuro */}
+          <p className="text-gray-700 leading-relaxed mb-6">
             By accessing or using the App, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, please do not use the App.
           </p>
 
@@ -63,7 +63,7 @@ export default function TermsAndConditionsPage() {
             <span className="font-medium">3.1. Our Content:</span> All content, features, and functionality of the App (including but not limited to text, graphics, logos, icons, images, audio clips, video clips, data compilations, and software) are the exclusive property of us or its licensors and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
           </p>
           <p className="text-gray-700 leading-relaxed mb-2">
-            <span className="font-medium">3.2. Your Content:</span> You retain ownership of any content you submit, post, or display on or through the App ("User Content"). By submitting User Content, you grant us a worldwide, non-exclusive, royalty-free, transferable, and sublicensable license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, perform, and display such User Content in connection with the operation of the App.
+            <span className="font-medium">3.2. Your Content:</span> You retain ownership of any content you submit, post, or display on or through the App (&quot;User Content&quot;). By submitting User Content, you grant us a worldwide, non-exclusive, royalty-free, transferable, and sublicensable license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, perform, and display such User Content in connection with the operation of the App.
           </p>
           <p className="text-gray-700 leading-relaxed mb-4">
             <span className="font-medium">3.3. Trademarks:</span> The BeQu name, logo, and all related names, logos, product and service names, designs, and slogans are trademarks of Best Quality Solutions GmbH or its affiliates or licensors. You must not use such marks without our prior written permission.
@@ -85,17 +85,17 @@ export default function TermsAndConditionsPage() {
             <span className="font-medium">4.2. Content Standards:</span> You are solely responsible for your User Content. You agree that your User Content will not:
           </p>
           <ul className="list-disc list-inside text-gray-700 ml-4 mb-4">
-            <li>Be unlawful, harmful, threatening, abusive, harassing, tortious, defamatory, vulgar, obscene, libelous, invasive of another's privacy, hateful, or racially, ethnically, or otherwise objectionable.</li>
-            <li>Contain any unsolicited or unauthorized advertising, promotional materials, "junk mail," "spam," "chain letters," "pyramid schemes," or any other form of solicitation.</li>
+            <li>Be unlawful, harmful, threatening, abusive, harassing, tortious, defamatory, vulgar, obscene, libelous, invasive of another&apos;s privacy, hateful, or racially, ethnically, or otherwise objectionable.</li>
+            <li>Contain any unsolicited or unauthorized advertising, promotional materials, &quot;junk mail,&quot; &quot;spam,&quot; &quot;chain letters,&quot; &quot;pyramid schemes,&quot; or any other form of solicitation.</li>
             <li>Impersonate any person or entity or falsely state or otherwise misrepresent your affiliation with a person or entity.</li>
           </ul>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">5. Payment Terms (Stripe)</h2>
           <p className="text-gray-700 leading-relaxed mb-2">
-            <span className="font-medium">5.1. Payment Processing:</span> We use Stripe for payment processing. By making a purchase through the App, you agree to be bound by Stripe's Terms of Service and Privacy Policy. We do not store your full payment card details on our servers.
+            <span className="font-medium">5.1. Payment Processing:</span> We use Stripe for payment processing. By making a purchase through the App, you agree to be bound by Stripe&apos;s Terms of Service and Privacy Policy. We do not store your full payment card details on our servers.
           </p>
           <p className="text-gray-700 leading-relaxed mb-2">
-            <span className="font-medium">5.2. Billing:</span> You agree to pay all fees and charges associated with your use of the App's paid features in accordance with the pricing and payment terms presented to you at the time of purchase.
+            <span className="font-medium">5.2. Billing:</span> You agree to pay all fees and charges associated with your use of the App&apos;s paid features in accordance with the pricing and payment terms presented to you at the time of purchase.
           </p>
           <p className="text-gray-700 leading-relaxed mb-2">
             <span className="font-medium">5.3. Subscriptions:</span> If you subscribe to a recurring service, you authorize us (via Stripe) to charge your designated payment method on a recurring basis until you cancel your subscription.
@@ -130,7 +130,7 @@ export default function TermsAndConditionsPage() {
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">7. Disclaimers</h2>
           <p className="text-gray-700 leading-relaxed mb-2">
-            <span className="font-medium">7.1. "AS IS" Basis:</span> The App is provided on an "AS IS" and "AS AVAILABLE" basis, without any warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.
+            <span className="font-medium">7.1. &quot;AS IS&quot; Basis:</span> The App is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis, without any warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.
           </p>
           <p className="text-gray-700 leading-relaxed mb-4">
             <span className="font-medium">7.2. No Guarantee:</span> We do not warrant that the App will be uninterrupted, secure, or error-free, that defects will be corrected, or that the App or the server that makes it available are free of viruses or other harmful components.
@@ -143,7 +143,7 @@ export default function TermsAndConditionsPage() {
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">9. Indemnification</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            <span className="font-medium">9.1. Your Responsibility:</span> You agree to defend, indemnify, and hold harmless Best Quality Solutions GmbH and its licensees and licensors, and their employees, contractors, agents, officers, and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees), resulting from or arising out of (a) your use and access of the App, by you or any person using your account and password; (b) a breach of these Terms; or (c) User Content posted on the App.
+            <span className="font-medium">9.1. Your Responsibility:</span> You agree to defend, indemnify, and hold harmless Best Quality Solutions GmbH and its licensees and licensors, and their employees, contractors, agents, officers, and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney&apos;s fees), resulting from or arising out of (a) your use and access of the App, by you or any person using your account and password; (b) a breach of these Terms; or (c) User Content posted on the App.
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">10. Governing Law and Dispute Resolution</h2>

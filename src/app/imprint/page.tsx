@@ -28,10 +28,10 @@ export default function ImprintPage() {
 
         {/* Sección de contenido con fondo blanco y texto oscuro */}
         <section className="bg-white p-8 rounded-lg shadow-xl mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-900">Information according to § 5 TMG:</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900">Information according to &sect; 5 TMG:</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             Best Quality Solutions GmbH<br />
-            Kieselstraße 6<br />
+            Kieselstra&szlig;e 6<br />
             D-51371 Leverkusen<br />
             Authorized representative: Frank Wollin
           </p>
@@ -47,20 +47,20 @@ export default function ImprintPage() {
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Commercial register entry</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             Registration number: HRB 110183<br />
-            Register court: Amtsgericht Köln<br />
-            VAT identification number according to § 27a UStG: DE354235838
+            Register court: Amtsgericht K&ouml;ln<br />
+            VAT identification number according to &sect; 27a UStG: DE354235838
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Disclaimer</h2>
 
           <h3 className="text-xl font-semibold mb-3 text-gray-800">Liability for content</h3>
           <p className="text-gray-700 leading-relaxed mb-4">
-            The content of our pages was created with great care. However, we cannot guarantee the accuracy, completeness, or timeliness of the content. As a service provider, we are responsible for our own content on these pages according to the general laws pursuant to § 7 para.1 TMG. According to §§ 8 to 10 TMG, we are not obligated as a service provider to monitor transmitted or stored external information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general laws remain unaffected. However, liability in this regard is only possible from the time of knowledge of a specific legal infringement. Upon becoming aware of such legal infringements, we will remove this content immediately.
+            The content of our pages was created with great care. However, we cannot guarantee the accuracy, completeness, or timeliness of the content. As a service provider, we are responsible for our own content on these pages according to the general laws pursuant to &sect; 7 para.1 TMG. According to &sect;&sect; 8 to 10 TMG, we are not obligated as a service provider to monitor transmitted or stored external information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general laws remain unaffected. However, liability in this regard is only possible from the time of knowledge of a specific legal infringement. Upon becoming aware of such legal infringements, we will remove this content immediately.
           </p>
 
           <h3 className="text-xl font-semibold mb-3 text-gray-800">Warranty and disclaimer from BeQu information</h3>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Best Quality Solutions GmbH strives to provide correct and up-to-date information through the Bequ application. However, the information offered by the Bequ chat regarding medical regulations is intended solely for general guidance purposes. No liability or guarantee can be assumed for the timeliness, correctness, and completeness of the information provided, as artificial intelligence can make mistakes and medical regulations are constantly evolving. The information is based on the AI's current understanding at the time of the consultation. The Bequ application does not replace the advice of a qualified medical or legal professional. A guarantee for achieving a specific result based on the information provided cannot be given, unless this was explicitly promised in writing.
+            Best Quality Solutions GmbH strives to provide correct and up-to-date information through the Bequ application. However, the information offered by the Bequ chat regarding medical regulations is intended solely for general guidance purposes. No liability or guarantee can be assumed for the timeliness, correctness, and completeness of the information provided, as artificial intelligence can make mistakes and medical regulations are constantly evolving. The information is based on the AI&apos;s current understanding at the time of the consultation. The Bequ application does not replace the advice of a qualified medical or legal professional. A guarantee for achieving a specific result based on the information provided cannot be given, unless this was explicitly promised in writing.
           </p>
 
           <h3 className="text-xl font-semibold mb-3 text-gray-800">Liability for links</h3>
@@ -80,7 +80,7 @@ export default function ImprintPage() {
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Contractual information</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            The information provided on this website regarding Bequ App's subscription plans and services is not to be understood as binding offers, but rather as an invitation to submit an offer. Contracts for the use of the Bequ App services and subscription plans presented here are only concluded through confirmation by Best Quality Solutions GmbH.
+            The information provided on this website regarding Bequ App&apos;s subscription plans and services is not to be understood as binding offers, but rather as an invitation to submit an offer. Contracts for the use of the Bequ App services and subscription plans presented here are only concluded through confirmation by Best Quality Solutions GmbH.
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Modifications</h2>
@@ -90,7 +90,7 @@ export default function ImprintPage() {
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Payment service provider</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            To process payments on our website, we use the payment service provider Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe processes your payment data, such as credit card information, to handle purchases made on our platform. Your data will only be passed on for payment processing with Stripe and only to the extent necessary for this purpose. For more information on Stripe's privacy policy, please visit:<br />
+            To process payments on our website, we use the payment service provider Stripe, Inc., 510 Townsend Street, San Francisco, CA 94103, USA. Stripe processes your payment data, such as credit card information, to handle purchases made on our platform. Your data will only be passed on for payment processing with Stripe and only to the extent necessary for this purpose. For more information on Stripe&apos;s privacy policy, please visit:<br />
             <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">stripe.com/de/privacy</a>.
           </p>
 
