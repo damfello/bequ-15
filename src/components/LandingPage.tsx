@@ -126,7 +126,7 @@ const AccordionItem = ({ question, answer, index }: { question: string, answer: 
 // Contenido para la sección de FAQ
 const faqContent = [
   {
-    question: "What's the difference between BeQu and other popular tools like ChatGPT/Gemini, among others?",
+    question: "What&apos;s the difference between BeQu and other popular tools like ChatGPT/Gemini, among others?",
     answer: "There are large generalist models trained with massive databases, capable of solving any type of task. BeQu specializes solely in medical device regulations, which allows it to significantly reduce the risk of hallucinations. In medical terms, BeQu is a medical specialist, while the larger models are trained with general practitioners."
   },
   {
@@ -197,7 +197,7 @@ export default function LandingPage() {
             <div className="bg-white/10 p-6 rounded-lg text-center backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15">
                <BookOpenIcon /> {/* Usando el icono SVG en línea */}
                <h3 className="text-xl font-semibold mb-2">Regulatory Knowledge</h3>
-               <p className="text-blue-200 text-sm leading-relaxed">Access updated guidance on official medical regulations. Our AI is trained to interpret complex compliance documents for quick, accurate answers.</p>
+               <p className="text-blue-200 text-sm leading-relaxed">Access updated guidance on official medical regulations. Our AI is trained to interpret complex compliance documents to provide quick, accurate answers.</p>
             </div>
             <div className="bg-white/10 p-6 rounded-lg text-center backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15">
                <CpuIcon /> {/* Usando el icono SVG en línea */}
@@ -248,7 +248,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Session Authentication */}
+      {/* Sección Authentication */}
       <section id="auth" className="py-16 md:py-20 px-6">
           <div className="max-w-md mx-auto text-center">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-white">Ready to Get Started?</h2>
