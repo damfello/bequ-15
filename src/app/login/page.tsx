@@ -56,11 +56,9 @@ export default function LoginPage() {
     const setupAuthUIObserver = () => {
       const observer = new MutationObserver((mutationsList) => {
         for (const mutation of mutationsList) {
-          // La condición corregida: solo verificamos 'childList' para detectar cambios en la estructura del DOM
-          // donde el formulario de registro podría aparecer.
           if (mutation.type === 'childList') {
-            // Busca el formulario de registro de Supabase (data-test="auth-sign-up")
-            const signupForm = document.querySelector('form[data-test="auth-sign-up"]');
+            // Busca el formulario de registro de Supabase usando el ID exacto
+            const signupForm = document.querySelector('form#auth-sign-up');
             const termsCheckboxContainer = document.getElementById('terms-checkbox-container');
 
             // Si el formulario de registro está presente y la casilla no ha sido inyectada
