@@ -24,7 +24,7 @@ export default function ImprintPage() {
 
       {/* Contenido principal del Imprint */}
       <main className="max-w-4xl mx-auto py-16 px-6">
-        <h1 className="text-4xl font-bold mb-8 text-center">Imprint</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center">Impressum </h1>
 
         {/* Sección de contenido con fondo blanco y texto oscuro */}
         <section className="bg-white p-8 rounded-lg shadow-xl mb-8">

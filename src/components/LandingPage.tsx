@@ -262,7 +262,7 @@ export default function LandingPage() {
         <div className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-6 mb-4">
           <a href="/terms-and-conditions" className="hover:text-white transition duration-150">Terms and Conditions</a>
           <a href="/privacy-policy" className="hover:text-white transition duration-150">Privacy Policy</a>
-          <a href="/imprint" className="hover:text-white transition duration-150">Imprint</a>
+          <a href="/impressum" className="hover:text-white transition duration-150">Impressum</a>
         </div>
         <p>Powered by BQS GmbH</p>
         <p>&copy; {new Date().getFullYear()} Best Quality Solutions GmbH. All rights reserved.</p>
