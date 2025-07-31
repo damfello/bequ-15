@@ -2,7 +2,7 @@
 
 import React from 'react';
 import LogoutButton from './LogoutButton';
-import { FiRefreshCw, FiCheckCircle, FiXCircle, FiLoader } from 'react-icons/fi';
+import { FiRefreshCw, FiCheckCircle, FiXCircle, FiLoader, FiSettings } from 'react-icons/fi'; // AÑADIDO: FiSettings importado
 
 // --- DEFINE PROPS TYPE FOR SidebarItem ---
 type SidebarItemProps = {
@@ -41,6 +41,9 @@ interface DashboardSidebarProps {
   isSubscriptionActive: boolean;
   isLoadingSubscription: boolean;
   onRefresh: () => void;
+  // AÑADIDO: Propiedades para la gestión de suscripciones
+  onManageSubscriptionClick: () => void;
+  isLoadingPortal: boolean;
 }
 
 // Main component function (updated)
@@ -49,6 +52,9 @@ export default function DashboardSidebar({
   isSubscriptionActive,
   isLoadingSubscription,
   onRefresh,
+  // AÑADIDO: Destructuración de nuevas props
+  onManageSubscriptionClick,
+  isLoadingPortal,
 }: DashboardSidebarProps) {
 
   return (
@@ -68,7 +74,17 @@ export default function DashboardSidebar({
           </div>
           {/* Refresh Button */}
           <SidebarItem onClick={onRefresh} disabled={isLoadingSubscription} icon={<FiRefreshCw className="h-4 w-4"/>} isLoading={isLoadingSubscription}> Refresh Status </SidebarItem>
-          {/* Manage Subscription Button has been removed */}
+          {/* AÑADIDO: Botón para gestionar la suscripción */}
+          {isSubscriptionActive && ( // Solo muestra el botón si hay una suscripción activa
+            <SidebarItem
+                onClick={onManageSubscriptionClick}
+                disabled={isLoadingPortal} // Deshabilitar si el portal está cargando
+                icon={<FiSettings className="h-4 w-4"/>}
+                isLoading={isLoadingPortal} // Mostrar loader si está cargando
+            >
+                Manage Subscription
+            </SidebarItem>
+          )}
        </nav>
 
        {/* ... Logout Button section remains the same ... */}

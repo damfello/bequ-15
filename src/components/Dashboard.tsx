@@ -18,7 +18,7 @@ export default function Dashboard({ session }: DashboardProps) {
     const [subscription, setSubscription] = useState<Subscription>(null);
     const [loadingSubscription, setLoadingSubscription] = useState(true);
     const [isSubscribing, setIsSubscribing] = useState(false);
-    // const [isPortalLoading, setIsPortalLoading] = useState(false); // REMOVED
+    const [isPortalLoading, setIsPortalLoading] = useState(false); // AÑADIDO: Nuevo estado para el portal de Stripe
 
     const fetchSubscription = useCallback(async () => {
         if (session?.user) {
@@ -78,11 +78,50 @@ export default function Dashboard({ session }: DashboardProps) {
         }
     }, [session?.access_token]);
 
+    // AÑADIDO: Función para manejar la gestión de suscripciones a través del portal de Stripe
+    const handleManageSubscription = useCallback(async () => {
+        if (!session?.access_token) {
+            console.error("User session/token missing.");
+            alert("Error: No se pudo acceder a la información de la sesión. Por favor, intente iniciar sesión nuevamente.");
+            return;
+        }
+        setIsPortalLoading(true); // Iniciar estado de carga del portal
+        try {
+            // Llamar a la API de Next.js que crea la sesión del portal de Stripe
+            const response = await fetch('/api/portal_sessions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`,
+                },
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || `API Error: ${response.statusText}`);
+            }
+
+            const { portalUrl } = await response.json();
+            if (!portalUrl) {
+                throw new Error('Could not retrieve Stripe customer portal URL.');
+            }
+
+            // Redirigir al usuario al portal de clientes de Stripe
+            window.location.href = portalUrl;
+
+        } catch (error) {
+            console.error('Error opening Stripe customer portal:', error);
+            const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+            alert(`Error al abrir el portal de suscripciones: ${errorMessage}`);
+        } finally {
+            setIsPortalLoading(false); // Finalizar estado de carga del portal
+        }
+    }, [session?.access_token]);
+
+
      const handleRefresh = useCallback(() => {
          fetchSubscription();
      }, [fetchSubscription]);
-
-     // handleManageSubscription function REMOVED
 
     const isActiveSubscriber = !!subscription;
 
@@ -93,7 +132,9 @@ export default function Dashboard({ session }: DashboardProps) {
             isSubscriptionActive={isActiveSubscriber}
             isLoadingSubscription={loadingSubscription}
             onRefresh={handleRefresh}
-            // Props related to managing subscription have been removed
+            // AÑADIDO: Propiedades para la gestión de suscripciones
+            onManageSubscriptionClick={handleManageSubscription}
+            isLoadingPortal={isPortalLoading}
           />
           <div className="flex-grow p-6 lg:p-8 overflow-y-auto">
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 lg:p-8 min-h-full flex flex-col">
