@@ -3,16 +3,15 @@
 import React, { useState, useEffect, useRef, FormEvent, ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/lib/supabaseClient';
+import { Session } from '@supabase/supabase-js';
 
-// Update Message structure to match the database and add sessionId for logical grouping
 interface Message {
   id: string;
   sender: 'user' | 'llm';
   text: string;
-  sessionId?: string; // Add optional sessionId to group messages
+  sessionId?: string;
 }
 
-// Define the type for the data coming from your API
 interface ChatHistoryItem {
   message: {
     type: 'human' | 'ai';
@@ -21,15 +20,14 @@ interface ChatHistoryItem {
   session_id: string;
 }
 
-// Simple SVG Placeholder Icons
 const UserAvatar = () => (
   <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-600 font-semibold">
-    U {/* Placeholder */}
+    U
   </div>
 );
 const BeQuAvatar = () => (
   <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs text-white font-semibold">
-    BQ {/* Placeholder */}
+    BQ
   </div>
 );
 const SendIcon = () => (
@@ -38,12 +36,12 @@ const SendIcon = () => (
   </svg>
 );
 
-
 interface BeQuChatProps {
-    refreshKey: number; // New prop to trigger a refresh
+    refreshKey: number;
+    session: Session;
 }
 
-export default function BeQuChat({ refreshKey }: BeQuChatProps) {
+export default function BeQuChat({ refreshKey, session }: BeQuChatProps) {
   const [chatSessionId, ] = useState<string>(uuidv4());
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentInput, setCurrentInput] = useState('');
@@ -54,17 +52,17 @@ export default function BeQuChat({ refreshKey }: BeQuChatProps) {
 
   const fetchChatHistory = async () => {
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !session?.access_token) {
-        console.error('No active session found.');
-        return;
-      }
+      const accessToken = session?.access_token;
+      if (!accessToken) {
+        console.error('No active session found.');
+        return;
+      }
 
       const response = await fetch('/api/chat', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
+          'Authorization': `Bearer ${accessToken}`
         },
       });
 
@@ -89,13 +87,12 @@ export default function BeQuChat({ refreshKey }: BeQuChatProps) {
     }
   };
 
-  // Initial effect to load chat history
   useEffect(() => {
     fetchChatHistory();
     if (messages.length === 0) {
       setMessages([{ id: uuidv4(), sender: 'llm', text: 'Hi, I am BeQu! I can help you resolve questions about medical device regulations in Europe.' }]);
     }
-  }, [messages.length, refreshKey]); // FIX: Added refreshKey to dependency array
+  }, [messages.length, refreshKey]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -123,12 +120,12 @@ export default function BeQuChat({ refreshKey }: BeQuChatProps) {
     setIsLoading(true);
 
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !session?.access_token) throw new Error(sessionError?.message || 'User session/token not found.');
+      const accessToken = session?.access_token;
+      if (!accessToken) throw new Error('User session/token not found.');
       
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
         body: JSON.stringify({ sessionId: chatSessionId, chatInput: messageText }),
       });
 

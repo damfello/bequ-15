@@ -3,8 +3,14 @@
 import { useState } from 'react';
 import DashboardSidebar from './DashboardSidebar';
 import BeQuChat from './BeQuChat';
+import { Session } from '@supabase/supabase-js';
 
-export default function Dashboard() {
+// Define las propiedades que Dashboard espera recibir
+interface DashboardProps {
+    session: Session;
+}
+
+export default function Dashboard({ session }: DashboardProps) {
     const [refreshKey, setRefreshKey] = useState(0);
 
     const handleHistoryDeleted = () => {
@@ -15,11 +21,14 @@ export default function Dashboard() {
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
-            <DashboardSidebar onHistoryDeleted={handleHistoryDeleted} />
+            <DashboardSidebar 
+                onHistoryDeleted={handleHistoryDeleted} 
+                session={session} 
+            />
             
             {/* Main Content Area */}
             <main className="flex-1 p-8">
-                <BeQuChat refreshKey={refreshKey} />
+                <BeQuChat refreshKey={refreshKey} session={session} />
             </main>
         </div>
     );

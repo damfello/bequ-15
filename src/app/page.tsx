@@ -12,7 +12,7 @@ export default async function Index() {
             {session ? (
                 <>
                     {console.log("HomePage Render: Rendering Dashboard.")}
-                    <Dashboard />
+                    <Dashboard session={session} />
                 </>
             ) : (
                 <>

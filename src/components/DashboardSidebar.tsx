@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { Session } from '@supabase/supabase-js';
 
 // SVG for universal trash can icon
 const DeleteIcon = () => (
@@ -15,11 +16,13 @@ const DeleteIcon = () => (
 
 interface DashboardSidebarProps {
     onHistoryDeleted: () => void;
+    session: Session;
 }
 
-export default function DashboardSidebar({ onHistoryDeleted }: DashboardSidebarProps) {
+export default function DashboardSidebar({ onHistoryDeleted, session }: DashboardSidebarProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const router = useRouter();
+    const userEmail = session?.user?.email || 'Unknown User';
 
     const handleDeleteHistory = async () => {
         if (!window.confirm('¿Estás seguro de que quieres eliminar todo tu historial de conversaciones? Esta acción es irreversible.')) {
@@ -45,7 +48,6 @@ export default function DashboardSidebar({ onHistoryDeleted }: DashboardSidebarP
                 throw new Error(`API Error: ${response.statusText}`);
             }
 
-            // Llama a la función del padre para notificar que el historial ha sido borrado
             onHistoryDeleted();
 
         } catch (error) {
@@ -63,7 +65,7 @@ export default function DashboardSidebar({ onHistoryDeleted }: DashboardSidebarP
                     <span className="text-lg font-bold">DA</span>
                 </div>
                 <div>
-                    <div className="text-sm font-semibold">damfelo@gmail.com</div>
+                    <div className="text-sm font-semibold">{userEmail}</div>
                     <div className="text-xs text-gray-400">Status: Active</div>
                 </div>
             </div>
@@ -104,7 +106,6 @@ export default function DashboardSidebar({ onHistoryDeleted }: DashboardSidebarP
                     <span>{isDeleting ? 'Deleting...' : 'Delete History'}</span>
                 </button>
             </div>
-            {/* You can add more navigation links here */}
         </aside>
     );
 }
