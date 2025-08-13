@@ -134,3 +134,31 @@ export async function GET(req: NextRequest) {
         return new NextResponse(errorMessage, { status });
     }
 }
+
+// -----------------------------------------------------------------------------
+// METODO DELETE (NUEVA FUNCION para eliminar el historial de un usuario)
+// -----------------------------------------------------------------------------
+export async function DELETE(req: NextRequest) {
+    try {
+        const user = await validateUser(req);
+
+        // Se elimina todo el historial de conversaciones para el usuario autenticado
+        const { error } = await supabaseAdmin
+            .from('n8n_chat_histories')
+            .delete()
+            .eq('user_id', user.id);
+
+        if (error) {
+            console.error('Error deleting chat history:', error);
+            return new NextResponse(`Failed to delete chat history: ${error.message}`, { status: 500 });
+        }
+
+        return new NextResponse('Chat history deleted successfully.', { status: 200 });
+
+    } catch (error) {
+        console.error('API /api/chat DELETE Error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+        const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
+        return new NextResponse(errorMessage, { status });
+    }
+}
