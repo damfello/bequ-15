@@ -5,12 +5,14 @@ import DashboardSidebar from './DashboardSidebar';
 import BeQuChat from './BeQuChat';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabaseClient';
+import { useRouter } from 'next/navigation'; // <-- Importamos useRouter
 
 interface DashboardProps {
     session: Session;
 }
 
 export default function Dashboard({ session }: DashboardProps) {
+    const router = useRouter(); // <-- Inicializamos useRouter
     const [refreshKey, setRefreshKey] = useState(0);
     const [isActiveSubscriber, setIsActiveSubscriber] = useState(false);
     const [loadingSubscription, setLoadingSubscription] = useState(true);
@@ -46,16 +48,44 @@ export default function Dashboard({ session }: DashboardProps) {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
-    const handleSubscriptionManage = () => {
-        console.log('Redirecting to Stripe customer portal...');
+    // FIX: Lógica para manejar la redirección a Stripe
+    const handleSubscriptionManage = async () => {
+        try {
+            const accessToken = session?.access_token;
+            if (!accessToken) {
+                throw new Error('No active session found.');
+            }
+
+            // Llama a tu API de Stripe para obtener la URL del portal
+            const response = await fetch('/api/stripe/portal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            if (data.url) {
+                // Redirige al usuario a la URL del portal de Stripe
+                router.push(data.url);
+            } else {
+                throw new Error('No URL returned from Stripe API.');
+            }
+        } catch (error) {
+            console.error('Error managing subscription:', error);
+            alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
     };
     
-    // FIX: Ahora la función de suscripción usa setIsSubscribing
     const handleSubscription = async () => {
         setIsSubscribing(true);
         console.log('Simulating Stripe checkout...');
-        // Aquí iría tu lógica de redirección a Stripe
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Simula un delay
+        await new Promise(resolve => setTimeout(resolve, 2000));
         setIsSubscribing(false);
     };
 
@@ -64,7 +94,7 @@ export default function Dashboard({ session }: DashboardProps) {
             <DashboardSidebar 
                 onHistoryDeleted={handleHistoryDeleted} 
                 session={session}
-                onSubscriptionManage={handleSubscriptionManage}
+                onSubscriptionManage={handleSubscriptionManage} // <-- Pasamos la función actualizada
             />
             
             <div className="flex flex-col flex-1">
@@ -87,7 +117,7 @@ export default function Dashboard({ session }: DashboardProps) {
                                 Start your journey to simplify medical regulations.
                             </p>
                             <button
-                                onClick={handleSubscription} // FIX: Llamamos a la función corregida
+                                onClick={handleSubscription}
                                 disabled={isSubscribing}
                                 className={`mt-4 w-full max-w-xs mx-auto font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${
                                     isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'
