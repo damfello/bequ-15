@@ -1,151 +1,98 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import type { Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabaseClient';
-import BeQuChat from '@/components/BeQuChat';
-import { loadStripe } from '@stripe/stripe-js';
+import { useState, useEffect, useCallback } from 'react';
 import DashboardSidebar from './DashboardSidebar';
+import BeQuChat from './BeQuChat';
+import { Session } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
 
-type Subscription = { stripe_subscription_status: string | null; } | null;
-interface DashboardProps { session: Session; }
-
-const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-if (!stripePublishableKey) { console.error("Stripe Publishable Key is not set"); }
-const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
+interface DashboardProps {
+    session: Session;
+}
 
 export default function Dashboard({ session }: DashboardProps) {
-    const [subscription, setSubscription] = useState<Subscription>(null);
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [isActiveSubscriber, setIsActiveSubscriber] = useState(false);
     const [loadingSubscription, setLoadingSubscription] = useState(true);
     const [isSubscribing, setIsSubscribing] = useState(false);
-    const [isPortalLoading, setIsPortalLoading] = useState(false); // AÑADIDO: Nuevo estado para el portal de Stripe
 
-    const fetchSubscription = useCallback(async () => {
-        if (session?.user) {
-            setLoadingSubscription(true);
-            try {
-                const { data, error } = await supabase
-                    .from('subscriptions')
-                    .select('stripe_subscription_status')
-                    .eq('user_id', session.user.id)
-                    .in('stripe_subscription_status', ['active', 'trialing'])
-                    .maybeSingle();
-                if (error) { throw error; }
-                setSubscription(data);
-            } catch (error: unknown) {
-                const message = error instanceof Error ? error.message : String(error);
-                console.error("Dashboard: Subscription fetch failed:", message);
-                setSubscription(null);
-            } finally {
-                setLoadingSubscription(false);
-            }
-        } else {
-            setSubscription(null);
+    // Función para verificar el estado de la suscripción
+    const checkSubscriptionStatus = useCallback(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('subscriptions')
+                .select('stripe_subscription_status')
+                .eq('user_id', session.user.id)
+                .in('stripe_subscription_status', ['active', 'trialing'])
+                .maybeSingle();
+
+            if (error) throw error;
+
+            setIsActiveSubscriber(!!data);
+        } catch (error) {
+            console.error('Error checking subscription status:', error);
+            setIsActiveSubscriber(false);
+        } finally {
             setLoadingSubscription(false);
         }
-    }, [session?.user?.id]);
+    }, [session.user.id]); // FIX: Added session.user.id to dependency array
 
     useEffect(() => {
-        fetchSubscription();
-    }, [fetchSubscription]);
+        if (session) {
+            checkSubscriptionStatus();
+        }
+    }, [session, checkSubscriptionStatus]);
 
-    const handleSubscription = useCallback(async () => {
-        if (!session?.access_token || !stripePromise) { console.error("User session/token missing or Stripe not loaded."); alert("Error: Could not initiate subscription."); return; }
+    const handleHistoryDeleted = () => {
+        setRefreshKey(prevKey => prevKey + 1);
+    };
+
+    // Función para manejar la suscripción (ejemplo conceptual)
+    const handleSubscription = async () => {
         setIsSubscribing(true);
-        try {
-            const response = await fetch('/api/checkout_sessions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}`}});
-            if (!response.ok) { const errorText = await response.text(); if (response.status === 401) { throw new Error(`Authentication failed: ${errorText}. Please try logging out and back in.`); } throw new Error(errorText || `API Error: ${response.statusText}`);}
-            const { sessionId } = await response.json();
-            if (!sessionId) { throw new Error('Could not retrieve Checkout Session ID from API.'); }
-
-            const stripe = await stripePromise;
-            if (!stripe) {
-               console.error('Stripe.js failed to load. Check NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.');
-               alert('Error initiating payment processor. Please try again later.');
-               setIsSubscribing(false);
-               return;
-            }
-
-            const { error } = await stripe.redirectToCheckout({ sessionId });
-
-            if (error) { console.error('Stripe redirectToCheckout error:', error); alert(`Error redirecting to payment: ${error.message}`);}
-        } catch (error) {
-            console.error('Subscription process error:', error);
-            const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
-            alert(`Subscription Error: ${errorMessage}`);
-        } finally {
-             setIsSubscribing(false);
-        }
-    }, [session?.access_token]);
-
-    // AÑADIDO: Función para manejar la gestión de suscripciones a través del portal de Stripe
-    const handleManageSubscription = useCallback(async () => {
-        if (!session?.access_token) {
-            console.error("User session/token missing.");
-            alert("Error: No se pudo acceder a la información de la sesión. Por favor, intente iniciar sesión nuevamente.");
-            return;
-        }
-        setIsPortalLoading(true); // Iniciar estado de carga del portal
-        try {
-            // Llamar a la API de Next.js que crea la sesión del portal de Stripe
-            const response = await fetch('/api/portal_sessions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`,
-                },
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || `API Error: ${response.statusText}`);
-            }
-
-            const { portalUrl } = await response.json();
-            if (!portalUrl) {
-                throw new Error('Could not retrieve Stripe customer portal URL.');
-            }
-
-            // Redirigir al usuario al portal de clientes de Stripe
-            window.location.href = portalUrl;
-
-        } catch (error) {
-            console.error('Error opening Stripe customer portal:', error);
-            const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
-            alert(`Error al abrir el portal de suscripciones: ${errorMessage}`);
-        } finally {
-            setIsPortalLoading(false); // Finalizar estado de carga del portal
-        }
-    }, [session?.access_token]);
-
-
-     const handleRefresh = useCallback(() => {
-         fetchSubscription();
-     }, [fetchSubscription]);
-
-    const isActiveSubscriber = !!subscription;
+        // ... (Tu lógica de suscripción con Stripe)
+        console.log('Redirecting to Stripe checkout...');
+        setIsSubscribing(false);
+    };
 
     return (
-        <div className="flex h-screen bg-gray-100">
-          <DashboardSidebar
-            userEmail={session.user.email!}
-            isSubscriptionActive={isActiveSubscriber}
-            isLoadingSubscription={loadingSubscription}
-            onRefresh={handleRefresh}
-            // AÑADIDO: Propiedades para la gestión de suscripciones
-            onManageSubscriptionClick={handleManageSubscription}
-            isLoadingPortal={isPortalLoading}
-          />
-          <div className="flex-grow p-6 lg:p-8 overflow-y-auto">
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 lg:p-8 min-h-full flex flex-col">
-              <h1 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-3">BeQu AI Assistant</h1>
-              <div className="flex-grow">
-                {loadingSubscription ? ( <div className="flex items-center justify-center h-full"><p className="text-gray-500">Checking subscription...</p></div> )
-                 : isActiveSubscriber ? ( <BeQuChat /> )
-                 : ( <div className='flex flex-col items-center justify-center text-center h-full max-w-lg mx-auto space-y-4'> <button onClick={handleSubscription} disabled={isSubscribing} className={`mt-4 w-full max-w-xs mx-auto font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${ isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'}`}> {isSubscribing ? 'Processing...' : 'Subscribe Now'} </button> </div> )}
-              </div>
+        <div className="flex h-screen bg-gray-100 text-gray-900">
+            <DashboardSidebar onHistoryDeleted={handleHistoryDeleted} session={session} />
+            
+            <div className="flex flex-col flex-1">
+                {/* Header (opcional) */}
+                <header className="p-4 bg-white shadow-sm flex items-center justify-between">
+                    <h2 className="text-xl font-bold">BeQu AI Assistant</h2>
+                </header>
+                
+                {/* Main Content Area */}
+                <div className="p-8 flex-grow overflow-auto">
+                    {loadingSubscription ? (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-gray-500">Checking subscription...</p>
+                        </div>
+                    ) : isActiveSubscriber ? (
+                        <BeQuChat refreshKey={refreshKey} session={session} /> // FIX: Pasamos las props aquí
+                    ) : (
+                        <div className='flex flex-col items-center justify-center text-center h-full max-w-lg mx-auto space-y-4'>
+                            <p className="text-2xl font-semibold text-gray-700">Get access to BeQu Assistant</p>
+                            <p className="text-gray-500">
+                                To use the chat, you need an active subscription.
+                                Start your journey to simplify medical regulations.
+                            </p>
+                            <button
+                                onClick={handleSubscription}
+                                disabled={isSubscribing}
+                                className={`mt-4 w-full max-w-xs mx-auto font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${
+                                    isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'
+                                }`}
+                            >
+                                {isSubscribing ? 'Processing...' : 'Subscribe Now'}
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
-          </div>
         </div>
-      );
+    );
 }
