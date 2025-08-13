@@ -46,16 +46,21 @@ export default function Dashboard({ session }: DashboardProps) {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
-    // NUEVA FUNCIÓN: Lógica para manejar la redirección a Stripe
     const handleSubscriptionManage = () => {
-        // Aquí debes añadir tu lógica de redirección a Stripe.
-        // Por ahora, solo es un marcador de posición.
         console.log('Redirecting to Stripe customer portal...');
+    };
+    
+    // FIX: Ahora la función de suscripción usa setIsSubscribing
+    const handleSubscription = async () => {
+        setIsSubscribing(true);
+        console.log('Simulating Stripe checkout...');
+        // Aquí iría tu lógica de redirección a Stripe
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simula un delay
+        setIsSubscribing(false);
     };
 
     return (
         <div className="flex h-screen bg-gray-100 text-gray-900">
-            {/* FIX: Pasamos la nueva prop aquí */}
             <DashboardSidebar 
                 onHistoryDeleted={handleHistoryDeleted} 
                 session={session}
@@ -63,12 +68,10 @@ export default function Dashboard({ session }: DashboardProps) {
             />
             
             <div className="flex flex-col flex-1">
-                {/* Header (opcional) */}
                 <header className="p-4 bg-white shadow-sm flex items-center justify-between">
                     <h2 className="text-xl font-bold">BeQu AI Assistant</h2>
                 </header>
                 
-                {/* Main Content Area */}
                 <div className="p-8 flex-grow overflow-auto">
                     {loadingSubscription ? (
                         <div className="flex items-center justify-center h-full">
@@ -84,7 +87,7 @@ export default function Dashboard({ session }: DashboardProps) {
                                 Start your journey to simplify medical regulations.
                             </p>
                             <button
-                                onClick={() => console.log('Subscribe Now clicked')}
+                                onClick={handleSubscription} // FIX: Llamamos a la función corregida
                                 disabled={isSubscribing}
                                 className={`mt-4 w-full max-w-xs mx-auto font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${
                                     isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'
