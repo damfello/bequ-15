@@ -1,111 +1,96 @@
 'use client';
 
-import React, { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation';
-import { Session } from '@supabase/supabase-js';
+import React from 'react';
+import LogoutButton from './LogoutButton';
+import { FiRefreshCw, FiCheckCircle, FiXCircle, FiLoader, FiSettings } from 'react-icons/fi'; // AÑADIDO: FiSettings importado
 
-// SVG for universal trash can icon
-const DeleteIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-    <path fillRule="evenodd" d="M16.5 4.478v.227a48.84 48.84 0 0 1 3.205 1.343a48.964 48.964 0 0 0-3.205-1.343Z" clipRule="evenodd" />
-    <path fillRule="evenodd" d="M2.25 4.5a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3v.227c-.381.085-.768.172-1.16.264a.784.784 0 0 0-.174.032l-.004.004a48.749 48.749 0 0 0-8.902 2.654l-.004.002-.002.001A.762.762 0 0 0 9 6.845v1.3a1.5 1.5 0 0 1-1.5 1.5H7.5a1.5 1.5 0 0 1-1.5-1.5v-1.3a.762.762 0 0 0-.012-.132h-.002a48.785 48.785 0 0 0-8.902-2.654c-.03-.01-.06-.017-.091-.027-.392-.092-.78-.179-1.161-.265V4.5Zm-1.5 2a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3v6.75a3 3 0 0 1-3 3H4.5a3 3 0 0 1-3-3V6.5Zm3 3.75a1.5 1.5 0 0 0 0 3H19.5a1.5 1.5 0 0 0 0-3H4.5Z" clipRule="evenodd" />
-    <path d="M12 18a1.5 1.5 0 0 1 1.5-1.5h.75a.75.75 0 0 0 0-1.5h-1.5A1.5 1.5 0 0 1 12 15a1.5 1.5 0 0 1-1.5-1.5v-3a1.5 1.5 0 0 1 3 0v3A1.5 1.5 0 0 1 12 18Zm-.75-7.5a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5h-.75ZM15 15a1.5 1.5 0 0 1 1.5-1.5h.75a.75.75 0 0 0 0-1.5h-1.5A1.5 1.5 0 0 1 15 12a1.5 1.5 0 0 1-1.5-1.5v-3a1.5 1.5 0 0 1 3 0v3a1.5 1.5 0 0 1-1.5 1.5Z" />
-  </svg>
+// --- DEFINE PROPS TYPE FOR SidebarItem ---
+type SidebarItemProps = {
+  onClick?: () => void;
+  disabled?: boolean;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  isLoading?: boolean;
+};
+
+// Reusable Sidebar Item component
+const SidebarItem = ({
+  onClick,
+  disabled,
+  icon,
+  children,
+  isLoading
+}: SidebarItemProps) => (
+    <button
+        onClick={onClick}
+        disabled={disabled || isLoading}
+        className={`flex items-center w-full space-x-3 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out
+                    ${disabled || isLoading ? 'text-blue-300/50 cursor-not-allowed' : 'text-blue-100 hover:bg-white/10 hover:text-white focus:outline-none focus:bg-white/10 focus:text-white'}
+                  `}
+    >
+        {isLoading ? <FiLoader className="animate-spin h-4 w-4" /> : icon}
+        <span>{children}</span>
+    </button>
 );
+// --- END SidebarItem DEFINITION ---
 
+
+// Props for the main DashboardSidebar component (updated)
 interface DashboardSidebarProps {
-    onHistoryDeleted: () => void;
-    session: Session;
+  userEmail: string;
+  isSubscriptionActive: boolean;
+  isLoadingSubscription: boolean;
+  onRefresh: () => void;
+  // AÑADIDO: Propiedades para la gestión de suscripciones
+  onManageSubscriptionClick: () => void;
+  isLoadingPortal: boolean;
 }
 
-export default function DashboardSidebar({ onHistoryDeleted, session }: DashboardSidebarProps) {
-    const [isDeleting, setIsDeleting] = useState(false);
-    const router = useRouter();
-    const userEmail = session?.user?.email || 'Unknown User';
+// Main component function (updated)
+export default function DashboardSidebar({
+  userEmail,
+  isSubscriptionActive,
+  isLoadingSubscription,
+  onRefresh,
+  // AÑADIDO: Destructuración de nuevas props
+  onManageSubscriptionClick,
+  isLoadingPortal,
+}: DashboardSidebarProps) {
 
-    const handleDeleteHistory = async () => {
-        if (!window.confirm('¿Estás seguro de que quieres eliminar todo tu historial de conversaciones? Esta acción es irreversible.')) {
-            return;
-        }
+  return (
+    <div className="w-64 flex-shrink-0 bg-gradient-to-b from-blue-900 to-indigo-900 text-white p-4 flex flex-col">
+       {/* ... Top Section with Title and Email ... */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-center mb-1">BeQu AI</h1>
+          <p className="text-xs text-blue-300 text-center truncate" title={userEmail}>{userEmail}</p>
+        </div>
 
-        setIsDeleting(true);
-        try {
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            if (sessionError || !session?.access_token) {
-                throw new Error('No active session found.');
-            }
+      {/* ... Navigation/Actions using SidebarItem ... */}
+       <nav className="flex-grow space-y-2">
+          {/* Status Display */}
+          <div className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm ${isSubscriptionActive ? 'bg-green-500/20 text-green-300' : 'bg-orange-500/20 text-orange-300'}`}>
+              {isLoadingSubscription ? <FiLoader className="animate-spin h-4 w-4"/> : (isSubscriptionActive ? <FiCheckCircle className="h-4 w-4" /> : <FiXCircle className="h-4 w-4" />)}
+              <span>Status: {isLoadingSubscription ? 'Checking...' : (isSubscriptionActive ? 'Active' : 'Inactive')}</span>
+          </div>
+          {/* Refresh Button */}
+          <SidebarItem onClick={onRefresh} disabled={isLoadingSubscription} icon={<FiRefreshCw className="h-4 w-4"/>} isLoading={isLoadingSubscription}> Refresh Status </SidebarItem>
+          {/* AÑADIDO: Botón para gestionar la suscripción */}
+          {isSubscriptionActive && ( // Solo muestra el botón si hay una suscripción activa
+            <SidebarItem
+                onClick={onManageSubscriptionClick}
+                disabled={isLoadingPortal} // Deshabilitar si el portal está cargando
+                icon={<FiSettings className="h-4 w-4"/>}
+                isLoading={isLoadingPortal} // Mostrar loader si está cargando
+            >
+                Manage Subscription
+            </SidebarItem>
+          )}
+       </nav>
 
-            const response = await fetch('/api/chat', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
-            }
-
-            onHistoryDeleted();
-
-        } catch (error) {
-            console.error('Error deleting chat history:', error);
-        } finally {
-            setIsDeleting(false);
-        }
-    };
-
-    return (
-        <aside className="w-64 bg-gray-900 text-white p-4 space-y-4">
-            <h1 className="text-xl font-bold mb-4">BeQu AI</h1>
-            <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                    <span className="text-lg font-bold">DA</span>
-                </div>
-                <div>
-                    <div className="text-sm font-semibold">{userEmail}</div>
-                    <div className="text-xs text-gray-400">Status: Active</div>
-                </div>
-            </div>
-            
-            <hr className="border-gray-700" />
-
-            <div className="space-y-2 text-sm">
-                <div className="flex items-center space-x-2 p-2 rounded-md bg-gray-800">
-                    <span className="text-green-400">●</span>
-                    <span>Status: Active</span>
-                </div>
-                <button 
-                  onClick={() => router.refresh()} 
-                  className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0 0v4.992m0 0h-4.992" />
-                    </svg>
-                    <span>Refresh Status</span>
-                </button>
-                <button
-                    onClick={() => console.log('Manage Subscription clicked')}
-                    className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 12h19.5m-16.5 3.75h16.5M7.5 19.5h9" />
-                    </svg>
-                    <span>Manage Subscription</span>
-                </button>
-                
-                {/* NUEVO BOTÓN PARA BORRAR HISTORIAL */}
-                <button
-                    onClick={handleDeleteHistory}
-                    disabled={isDeleting}
-                    className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2 text-red-400 disabled:opacity-50"
-                >
-                    <DeleteIcon />
-                    <span>{isDeleting ? 'Deleting...' : 'Delete History'}</span>
-                </button>
-            </div>
-        </aside>
-    );
+       {/* ... Logout Button section remains the same ... */}
+       <div className='w-full mt-4 border-t border-white/10 pt-4'>
+           <LogoutButton className="flex items-center w-full space-x-3 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out bg-transparent text-blue-100 hover:bg-red-800/50 hover:text-white focus:outline-none focus:bg-red-800/50 focus:text-white" />
+       </div>
+    </div>
+  );
 }
