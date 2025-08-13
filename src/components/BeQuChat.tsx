@@ -12,6 +12,15 @@ interface Message {
   sessionId?: string; // Add optional sessionId to group messages
 }
 
+// Define the type for the data coming from your API
+interface ChatHistoryItem {
+  message: {
+    type: 'human' | 'ai';
+    content: string;
+  };
+  session_id: string;
+}
+
 // Simple SVG Placeholder Icons
 const UserAvatar = () => (
   <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-600 font-semibold">
@@ -31,12 +40,12 @@ const SendIcon = () => (
 
 
 export default function BeQuChat() {
-  // We will use a unique session ID per-chat. Let's start with a UUID on load.
-  const [chatSessionId, setChatSessionId] = useState<string>(uuidv4());
+  // No need to set the sessionId in a separate state if it's not being used after the initial render
+  const [chatSessionId, ] = useState<string>(uuidv4());
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentInput, setCurrentInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true); // New state to handle initial loading
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -46,7 +55,7 @@ export default function BeQuChat() {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       if (sessionError || !session?.access_token) {
         console.error('No active session found.');
-        return; // Do not proceed without a user session
+        return;
       }
 
       const response = await fetch('/api/chat', {
@@ -64,34 +73,29 @@ export default function BeQuChat() {
       
       // Filter out messages that might not have the correct format (e.g., old ones)
       const formattedHistory: Message[] = data.history
-        .filter((item: any) => item.message && item.message.type && item.message.content)
-        .map((item: any) => ({
-          id: uuidv4(), // Generate a new local ID
+        .filter((item: ChatHistoryItem) => item.message && item.message.type && item.message.content) // Correctly typed now
+        .map((item: ChatHistoryItem) => ({ // Correctly typed now
+          id: uuidv4(),
           sender: item.message.type === 'human' ? 'user' : 'llm',
           text: item.message.content,
           sessionId: item.session_id,
         }));
-
       setMessages(formattedHistory);
-
     } catch (error) {
       console.error('Error fetching chat history:', error);
       // Optionally, show an error message in the chat
     } finally {
-      setIsInitialLoad(false); // Finished initial loading
+      setIsInitialLoad(false);
     }
   };
 
   // Initial effect to load chat history
   useEffect(() => {
     fetchChatHistory();
-    // Check if the initial state is empty after loading.
-    if (messages.length === 0) {
-      // If no history, show the welcome message.
+    if (messages.length === 0) {
       setMessages([{ id: uuidv4(), sender: 'llm', text: 'Hi, I am BeQu! I can help you resolve questions about medical device regulations in Europe.' }]);
     }
-  }, []);
-
+  }, [messages.length]); // Fix: Added messages.length to the dependency array
 
   // Auto-scroll message area
   useEffect(() => {
@@ -115,7 +119,7 @@ export default function BeQuChat() {
   const handleSendMessage = async (event?: FormEvent<HTMLFormElement>) => {
     if (event) { event.preventDefault(); }
     const messageText = currentInput.trim();
-    if (!messageText || isLoading) return; // Removed chatSessionId check, as it's always set now
+    if (!messageText || isLoading) return;
 
     const userMessage: Message = { id: uuidv4(), sender: 'user', text: messageText };
     setMessages((prev) => [...prev, userMessage]);
@@ -159,7 +163,6 @@ export default function BeQuChat() {
 
   return (
     <div className="flex flex-col h-[70vh] max-h-[750px] border rounded-lg bg-white shadow-md overflow-hidden">
-      {/* Conditionally render loading state */}
       {isInitialLoad ? (
         <div className="flex-grow p-4 overflow-y-auto space-y-4 bg-gray-50 flex items-center justify-center text-gray-500 italic">
           <p>Loading chat history...</p>
@@ -207,14 +210,14 @@ export default function BeQuChat() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Ask BeQu about FDA/MDR..."
-            disabled={isLoading || isInitialLoad} // Disable input during initial load
+            disabled={isLoading || isInitialLoad}
             className="flex-grow border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-200 resize-none overflow-hidden max-h-28 text-gray-900"
             rows={1}
             required
           />
           <button
             type="submit"
-            disabled={isLoading || isInitialLoad || !currentInput.trim()} // Disable send button during initial load
+            disabled={isLoading || isInitialLoad || !currentInput.trim()}
             className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-1 focus:ring-blue-500 shrink-0"
             aria-label="Send message"
           >
