@@ -5,14 +5,14 @@ import DashboardSidebar from './DashboardSidebar';
 import BeQuChat from './BeQuChat';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation'; // <-- Importamos useRouter
+import { useRouter } from 'next/navigation';
 
 interface DashboardProps {
     session: Session;
 }
 
 export default function Dashboard({ session }: DashboardProps) {
-    const router = useRouter(); // <-- Inicializamos useRouter
+    const router = useRouter();
     const [refreshKey, setRefreshKey] = useState(0);
     const [isActiveSubscriber, setIsActiveSubscriber] = useState(false);
     const [loadingSubscription, setLoadingSubscription] = useState(true);
@@ -48,7 +48,7 @@ export default function Dashboard({ session }: DashboardProps) {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
-    // FIX: Lógica para manejar la redirección a Stripe
+    // FIX: Lógica para manejar la redirección a Stripe, llamando a tu endpoint original
     const handleSubscriptionManage = async () => {
         try {
             const accessToken = session?.access_token;
@@ -56,8 +56,8 @@ export default function Dashboard({ session }: DashboardProps) {
                 throw new Error('No active session found.');
             }
 
-            // Llama a tu API de Stripe para obtener la URL del portal
-            const response = await fetch('/api/stripe/portal', {
+            // Llama a tu API original
+            const response = await fetch('/api/portal_sessions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,15 +66,16 @@ export default function Dashboard({ session }: DashboardProps) {
             });
             
             if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
+                const errorText = await response.text();
+                throw new Error(`API Error: ${errorText || response.statusText}`);
             }
 
             const data = await response.json();
-            if (data.url) {
+            if (data.portalUrl) {
                 // Redirige al usuario a la URL del portal de Stripe
-                router.push(data.url);
+                router.push(data.portalUrl);
             } else {
-                throw new Error('No URL returned from Stripe API.');
+                throw new Error('No portal URL returned from API.');
             }
         } catch (error) {
             console.error('Error managing subscription:', error);
@@ -94,7 +95,7 @@ export default function Dashboard({ session }: DashboardProps) {
             <DashboardSidebar 
                 onHistoryDeleted={handleHistoryDeleted} 
                 session={session}
-                onSubscriptionManage={handleSubscriptionManage} // <-- Pasamos la función actualizada
+                onSubscriptionManage={handleSubscriptionManage}
             />
             
             <div className="flex flex-col flex-1">
