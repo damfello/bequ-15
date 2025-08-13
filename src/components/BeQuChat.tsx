@@ -1,17 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, useRef, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useEffect, useRef, FormEvent, ChangeEvent, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/lib/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 
+// Update Message structure to match the database and add sessionId for logical grouping
 interface Message {
   id: string;
   sender: 'user' | 'llm';
   text: string;
-  sessionId?: string;
+  sessionId?: string; // Add optional sessionId to group messages
 }
 
+// Define the type for the data coming from your API
 interface ChatHistoryItem {
   message: {
     type: 'human' | 'ai';
@@ -20,6 +22,7 @@ interface ChatHistoryItem {
   session_id: string;
 }
 
+// Simple SVG Placeholder Icons
 const UserAvatar = () => (
   <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-600 font-semibold">
     U
@@ -50,8 +53,8 @@ export default function BeQuChat({ refreshKey, session }: BeQuChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const fetchChatHistory = async () => {
-    try {
+  const fetchChatHistory = useCallback(async () => {
+    try {
       const accessToken = session?.access_token;
       if (!accessToken) {
         console.error('No active session found.');
@@ -85,14 +88,14 @@ export default function BeQuChat({ refreshKey, session }: BeQuChatProps) {
     } finally {
       setIsInitialLoad(false);
     }
-  };
+  }, [session?.access_token]); // FIX: Added session.access_token as dependency
 
   useEffect(() => {
     fetchChatHistory();
     if (messages.length === 0) {
       setMessages([{ id: uuidv4(), sender: 'llm', text: 'Hi, I am BeQu! I can help you resolve questions about medical device regulations in Europe.' }]);
     }
-  }, [messages.length, refreshKey]);
+  }, [messages.length, refreshKey, fetchChatHistory]); // FIX: Added fetchChatHistory to dependencies
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
