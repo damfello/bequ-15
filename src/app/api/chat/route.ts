@@ -120,27 +120,30 @@ export async function POST(req: NextRequest) {
 // METODO GET (NUEVA FUNCION para obtener el historial)
 // -----------------------------------------------------------------------------
 export async function GET(req: NextRequest) {
-    try {
-        const user = await validateUser(req);
-        
-        // AQUI ESTA EL CAMBIO #3: Trae el historial de un usuario específico
-        const { data: history, error } = await supabaseAdmin
-            .from('n8n_chat_histories')
-            .select('session_id, message')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: true });
+    try {
+        const user = await validateUser(req);
+        
+        // AQUI ESTA EL CAMBIO #3: Trae el historial de un usuario específico
+        // Usamos .select('*') para ser más flexibles y .order('id') para que funcione
+        // incluso si no tienes un campo de fecha.
+        const { data: history, error } = await supabaseAdmin
+            .from('n8n_chat_histories')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('id', { ascending: true }); // Ordenamos por 'id' que siempre existe y es incremental.
 
-        if (error) {
-            console.error('Error fetching chat history:', error);
-            return new NextResponse('Failed to fetch chat history.', { status: 500 });
-        }
+        if (error) {
+            console.error('Error fetching chat history:', error);
+            // Devuelve el error real de Supabase para poder depurar
+            return new NextResponse(`Failed to fetch chat history: ${error.message}`, { status: 500 });
+        }
 
-        return NextResponse.json({ history });
+        return NextResponse.json({ history });
 
-    } catch (error) {
-        console.error('API /api/chat Error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
-        const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
-        return new NextResponse(errorMessage, { status });
-    }
+    } catch (error) {
+        console.error('API /api/chat Error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+        const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
+        return new NextResponse(errorMessage, { status });
+    }
 }
