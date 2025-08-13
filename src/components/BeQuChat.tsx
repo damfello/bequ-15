@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef, FormEvent, ChangeEvent, useCallback } from 'react';
+import React, { useState, useEffect, useRef, FormEvent, ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '@/lib/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 
 // Update Message structure to match the database and add sessionId for logical grouping
@@ -53,8 +52,8 @@ export default function BeQuChat({ refreshKey, session }: BeQuChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const fetchChatHistory = useCallback(async () => {
-    try {
+  const fetchChatHistory = async () => {
+    try {
       const accessToken = session?.access_token;
       if (!accessToken) {
         console.error('No active session found.');
@@ -88,14 +87,14 @@ export default function BeQuChat({ refreshKey, session }: BeQuChatProps) {
     } finally {
       setIsInitialLoad(false);
     }
-  }, [session?.access_token]); // FIX: Added session.access_token as dependency
+  };
 
   useEffect(() => {
     fetchChatHistory();
     if (messages.length === 0) {
       setMessages([{ id: uuidv4(), sender: 'llm', text: 'Hi, I am BeQu! I can help you resolve questions about medical device regulations in Europe.' }]);
     }
-  }, [messages.length, refreshKey, fetchChatHistory]); // FIX: Added fetchChatHistory to dependencies
+  }, [messages.length, refreshKey]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
