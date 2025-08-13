@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/supabase-js';
 import LogoutButton from './LogoutButton';
 
@@ -23,7 +22,6 @@ interface DashboardSidebarProps {
 
 export default function DashboardSidebar({ onHistoryDeleted, session, onSubscriptionManage }: DashboardSidebarProps) {
     const [isDeleting, setIsDeleting] = useState(false);
-    const router = useRouter();
     const userEmail = session?.user?.email || 'Unknown User';
 
     const handleDeleteHistory = async () => {
