@@ -33,18 +33,18 @@ async function checkActiveSubscription(userId: string): Promise<boolean> {
 // FUNCION PARA GUARDAR UN MENSAJE EN LA BASE DE DATOS
 // -----------------------------------------------------------------------------
 async function saveMessage(userId: string, sessionId: string, content: string, type: 'human' | 'ai') {
-    const { error } = await supabaseAdmin
-        .from('n8n_chat_histories')
-        .insert({
-            user_id: userId,
-            session_id: sessionId,
-            message: { type, content },
-            created_at: new Date().toISOString()
-        });
-    if (error) {
-        console.error('Error saving message to history:', error);
-        throw new Error('Failed to save message to history');
-    }
+    const { error } = await supabaseAdmin
+        .from('n8n_chat_histories')
+        .insert({
+            user_id: userId,
+            session_id: sessionId,
+            message: { type, content },
+            created_at: new Date().toISOString()
+        });
+    if (error) {
+        console.error('Error saving message to history:', error);
+        throw new Error('Failed to save message to history');
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -63,14 +63,21 @@ export async function POST(req: NextRequest) {
 
     try {
         const user = await validateUser(req);
+        
+        // --- AÑADIMOS LAS LÍNEAS DE DEPURACIÓN AQUÍ ---
+        console.log('VERCEL-LOG: user.id obtenido:', user.id); 
+        const { sessionId, chatInput } = await req.json();
+        const messageData = { type: 'human', content: chatInput };
+        console.log('VERCEL-LOG: Datos a guardar:', { user_id: user.id, sessionId: sessionId, message: messageData });
+        // --- FIN DE LÍNEAS DE DEPURACIÓN ---
+
         const isActive = await checkActiveSubscription(user.id);
         if (!isActive) { return new NextResponse('Forbidden: Active subscription required.', { status: 403 }); }
 
-        const { sessionId, chatInput } = await req.json();
         if (!sessionId || typeof chatInput === 'undefined') { return new NextResponse('Bad Request: Missing sessionId or chatInput.', { status: 400 }); }
-        
-        // AQUI ESTA EL CAMBIO #1: Guarda el mensaje del usuario ANTES de enviarlo a n8n
-        await saveMessage(user.id, sessionId, chatInput, 'human');
+        
+        // AQUI ESTA EL CAMBIO #1: Guarda el mensaje del usuario ANTES de enviarlo a n8n
+        await saveMessage(user.id, sessionId, chatInput, 'human');
 
         const n8nPayload = { sessionId, chatInput };
         const headersToN8n: HeadersInit = {
@@ -95,8 +102,8 @@ export async function POST(req: NextRequest) {
         const n8nData = await n8nResponse.json();
         if (typeof n8nData.output === 'undefined') { throw new Error('Chat engine response format error.'); }
 
-        // AQUI ESTA EL CAMBIO #2: Guarda la respuesta de n8n
-        await saveMessage(user.id, sessionId, n8nData.output, 'ai');
+        // AQUI ESTA EL CAMBIO #2: Guarda la respuesta de n8n
+        await saveMessage(user.id, sessionId, n8nData.output, 'ai');
 
         return NextResponse.json({ output: n8nData.output });
 
@@ -114,27 +121,27 @@ export async function POST(req: NextRequest) {
 // METODO GET (NUEVA FUNCION para obtener el historial)
 // -----------------------------------------------------------------------------
 export async function GET(req: NextRequest) {
-    try {
-        const user = await validateUser(req);
-        
-        // AQUI ESTA EL CAMBIO #3: Trae el historial de un usuario específico
-        const { data: history, error } = await supabaseAdmin
-            .from('n8n_chat_histories')
-            .select('session_id, message')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: true });
+    try {
+        const user = await validateUser(req);
+        
+        // AQUI ESTA EL CAMBIO #3: Trae el historial de un usuario específico
+        const { data: history, error } = await supabaseAdmin
+            .from('n8n_chat_histories')
+            .select('session_id, message')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: true });
 
-        if (error) {
-            console.error('Error fetching chat history:', error);
-            return new NextResponse('Failed to fetch chat history.', { status: 500 });
-        }
+        if (error) {
+            console.error('Error fetching chat history:', error);
+            return new NextResponse('Failed to fetch chat history.', { status: 500 });
+        }
 
-        return NextResponse.json({ history });
+        return NextResponse.json({ history });
 
-    } catch (error) {
-        console.error('API /api/chat Error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
-        const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
-        return new NextResponse(errorMessage, { status });
-    }
+    } catch (error) {
+        console.error('API /api/chat Error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+        const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
+        return new NextResponse(errorMessage, { status });
+    }
 }
