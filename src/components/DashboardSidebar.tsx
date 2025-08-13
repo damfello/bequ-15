@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/supabase-js';
+import LogoutButton from './LogoutButton'; // Importamos tu componente de logout
 
 // SVG for universal trash can icon
 const DeleteIcon = () => (
@@ -14,13 +15,13 @@ const DeleteIcon = () => (
   </svg>
 );
 
-// FIX: La interfaz ahora define todas las propiedades que Dashboard le pasa
 interface DashboardSidebarProps {
     onHistoryDeleted: () => void;
     session: Session;
+    onSubscriptionManage: () => void;
 }
 
-export default function DashboardSidebar({ onHistoryDeleted, session }: DashboardSidebarProps) {
+export default function DashboardSidebar({ onHistoryDeleted, session, onSubscriptionManage }: DashboardSidebarProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const router = useRouter();
     const userEmail = session?.user?.email || 'Unknown User';
@@ -59,7 +60,7 @@ export default function DashboardSidebar({ onHistoryDeleted, session }: Dashboar
     };
 
     return (
-        <aside className="w-64 bg-gray-900 text-white p-4 space-y-4">
+        <aside className="w-64 bg-gray-900 text-white p-4 space-y-4 relative">
             <h1 className="text-xl font-bold mb-4">BeQu AI</h1>
             <div className="flex items-center space-x-2">
                 <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
@@ -88,7 +89,7 @@ export default function DashboardSidebar({ onHistoryDeleted, session }: Dashboar
                     <span>Refresh Status</span>
                 </button>
                 <button
-                    onClick={() => console.log('Manage Subscription clicked')}
+                    onClick={onSubscriptionManage}
                     className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -97,7 +98,7 @@ export default function DashboardSidebar({ onHistoryDeleted, session }: Dashboar
                     <span>Manage Subscription</span>
                 </button>
                 
-                {/* NUEVO BOTÓN PARA BORRAR HISTORIAL */}
+                {/* BOTÓN PARA BORRAR HISTORIAL */}
                 <button
                     onClick={handleDeleteHistory}
                     disabled={isDeleting}
@@ -106,6 +107,11 @@ export default function DashboardSidebar({ onHistoryDeleted, session }: Dashboar
                     <DeleteIcon />
                     <span>{isDeleting ? 'Deleting...' : 'Delete History'}</span>
                 </button>
+            </div>
+            
+            {/* BOTÓN DE LOGOUT */}
+            <div className="absolute bottom-4 left-4 right-4">
+              <LogoutButton className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2" />
             </div>
         </aside>
     );

@@ -16,7 +16,6 @@ export default function Dashboard({ session }: DashboardProps) {
     const [loadingSubscription, setLoadingSubscription] = useState(true);
     const [isSubscribing, setIsSubscribing] = useState(false);
 
-    // Función para verificar el estado de la suscripción
     const checkSubscriptionStatus = useCallback(async () => {
         try {
             const { data, error } = await supabase
@@ -35,7 +34,7 @@ export default function Dashboard({ session }: DashboardProps) {
         } finally {
             setLoadingSubscription(false);
         }
-    }, [session.user.id]); // FIX: Added session.user.id to dependency array
+    }, [session.user.id]);
 
     useEffect(() => {
         if (session) {
@@ -47,17 +46,21 @@ export default function Dashboard({ session }: DashboardProps) {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
-    // Función para manejar la suscripción (ejemplo conceptual)
-    const handleSubscription = async () => {
-        setIsSubscribing(true);
-        // ... (Tu lógica de suscripción con Stripe)
-        console.log('Redirecting to Stripe checkout...');
-        setIsSubscribing(false);
+    // NUEVA FUNCIÓN: Lógica para manejar la redirección a Stripe
+    const handleSubscriptionManage = () => {
+        // Aquí debes añadir tu lógica de redirección a Stripe.
+        // Por ahora, solo es un marcador de posición.
+        console.log('Redirecting to Stripe customer portal...');
     };
 
     return (
         <div className="flex h-screen bg-gray-100 text-gray-900">
-            <DashboardSidebar onHistoryDeleted={handleHistoryDeleted} session={session} />
+            {/* FIX: Pasamos la nueva prop aquí */}
+            <DashboardSidebar 
+                onHistoryDeleted={handleHistoryDeleted} 
+                session={session}
+                onSubscriptionManage={handleSubscriptionManage}
+            />
             
             <div className="flex flex-col flex-1">
                 {/* Header (opcional) */}
@@ -72,7 +75,7 @@ export default function Dashboard({ session }: DashboardProps) {
                             <p className="text-gray-500">Checking subscription...</p>
                         </div>
                     ) : isActiveSubscriber ? (
-                        <BeQuChat refreshKey={refreshKey} session={session} /> // FIX: Pasamos las props aquí
+                        <BeQuChat refreshKey={refreshKey} session={session} />
                     ) : (
                         <div className='flex flex-col items-center justify-center text-center h-full max-w-lg mx-auto space-y-4'>
                             <p className="text-2xl font-semibold text-gray-700">Get access to BeQu Assistant</p>
@@ -81,7 +84,7 @@ export default function Dashboard({ session }: DashboardProps) {
                                 Start your journey to simplify medical regulations.
                             </p>
                             <button
-                                onClick={handleSubscription}
+                                onClick={() => console.log('Subscribe Now clicked')}
                                 disabled={isSubscribing}
                                 className={`mt-4 w-full max-w-xs mx-auto font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${
                                     isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'
