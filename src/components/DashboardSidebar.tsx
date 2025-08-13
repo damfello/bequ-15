@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { Session } from '@supabase/supabase-js';
-import LogoutButton from './LogoutButton'; // Importamos tu componente de logout
+import LogoutButton from './LogoutButton';
 
 // SVG for universal trash can icon
 const DeleteIcon = () => (
@@ -79,15 +79,7 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
                     <span className="text-green-400">●</span>
                     <span>Status: Active</span>
                 </div>
-                <button 
-                  onClick={() => router.refresh()} 
-                  className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0 0v4.992m0 0h-4.992" />
-                    </svg>
-                    <span>Refresh Status</span>
-                </button>
+                
                 <button
                     onClick={onSubscriptionManage}
                     className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2"
@@ -98,7 +90,6 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
                     <span>Manage Subscription</span>
                 </button>
                 
-                {/* BOTÓN PARA BORRAR HISTORIAL */}
                 <button
                     onClick={handleDeleteHistory}
                     disabled={isDeleting}
@@ -109,7 +100,6 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
                 </button>
             </div>
             
-            {/* BOTÓN DE LOGOUT */}
             <div className="absolute bottom-4 left-4 right-4">
               <LogoutButton className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2" />
             </div>
