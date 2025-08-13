@@ -33,18 +33,17 @@ async function checkActiveSubscription(userId: string): Promise<boolean> {
 // FUNCION PARA GUARDAR UN MENSAJE EN LA BASE DE DATOS
 // -----------------------------------------------------------------------------
 async function saveMessage(userId: string, sessionId: string, content: string, type: 'human' | 'ai') {
-    const { error } = await supabaseAdmin
-        .from('n8n_chat_histories')
-        .insert({
-            user_id: userId,
-            session_id: sessionId,
-            message: { type, content },
-            created_at: new Date().toISOString()
-        });
-    if (error) {
-        console.error('Error saving message to history:', error);
-        throw new Error('Failed to save message to history');
-    }
+    const { error } = await supabaseAdmin
+        .from('n8n_chat_histories')
+        .insert({
+            user_id: userId,
+            session_id: sessionId,
+            message: { type, content },
+        });
+    if (error) {
+        console.error('Error saving message to history:', error);
+        throw new Error('Failed to save message to history');
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -63,14 +62,15 @@ export async function POST(req: NextRequest) {
 
     try {
         const user = await validateUser(req);
+        const { sessionId, chatInput } = await req.json();
+
         const isActive = await checkActiveSubscription(user.id);
         if (!isActive) { return new NextResponse('Forbidden: Active subscription required.', { status: 403 }); }
 
-        const { sessionId, chatInput } = await req.json();
         if (!sessionId || typeof chatInput === 'undefined') { return new NextResponse('Bad Request: Missing sessionId or chatInput.', { status: 400 }); }
-        
-        // AQUI ESTA EL CAMBIO #1: Guarda el mensaje del usuario ANTES de enviarlo a n8n
-        await saveMessage(user.id, sessionId, chatInput, 'human');
+        
+        // Guarda el mensaje del usuario ANTES de enviarlo a n8n
+        await saveMessage(user.id, sessionId, chatInput, 'human');
 
         const n8nPayload = { sessionId, chatInput };
         const headersToN8n: HeadersInit = {
@@ -78,10 +78,6 @@ export async function POST(req: NextRequest) {
             [n8nAuthHeaderName]: n8nAuthHeaderValue,
             'X-Supabase-Auth': req.headers.get('Authorization') || '',
         };
-          // ==========================================================
-        // ===== AÑADE ESTA LÍNEA PARA VER EL TOKEN QUE SE ENVÍA ====
-        console.log('VERCEL-LOG: Token enviado a n8n:', req.headers.get('Authorization'));
-        // ==========================================================
 
         console.log(`Forwarding chat request to n8n for session ${sessionId}`);
         const n8nResponse = await fetch(n8nWebhookUrl, { method: 'POST', headers: headersToN8n, body: JSON.stringify(n8nPayload) });
@@ -95,8 +91,8 @@ export async function POST(req: NextRequest) {
         const n8nData = await n8nResponse.json();
         if (typeof n8nData.output === 'undefined') { throw new Error('Chat engine response format error.'); }
 
-        // AQUI ESTA EL CAMBIO #2: Guarda la respuesta de n8n
-        await saveMessage(user.id, sessionId, n8nData.output, 'ai');
+        // Guarda la respuesta de n8n
+        await saveMessage(user.id, sessionId, n8nData.output, 'ai');
 
         return NextResponse.json({ output: n8nData.output });
 
@@ -114,25 +110,53 @@ export async function POST(req: NextRequest) {
 // METODO GET (NUEVA FUNCION para obtener el historial)
 // -----------------------------------------------------------------------------
 export async function GET(req: NextRequest) {
+    try {
+        const user = await validateUser(req);
+        
+        // Trae el historial de un usuario específico
+        const { data: history, error } = await supabaseAdmin
+            .from('n8n_chat_histories')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('id', { ascending: true });
+
+        if (error) {
+            console.error('Error fetching chat history:', error);
+            return new NextResponse(`Failed to fetch chat history: ${error.message}`, { status: 500 });
+        }
+
+        return NextResponse.json({ history });
+
+    } catch (error) {
+        console.error('API /api/chat Error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+        const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
+        return new NextResponse(errorMessage, { status });
+    }
+}
+
+// -----------------------------------------------------------------------------
+// METODO DELETE (NUEVA FUNCION para eliminar el historial de un usuario)
+// -----------------------------------------------------------------------------
+export async function DELETE(req: NextRequest) {
     try {
         const user = await validateUser(req);
-        
-        // AQUI ESTA EL CAMBIO #3: Trae el historial de un usuario específico
-        const { data: history, error } = await supabaseAdmin
+
+        // Se elimina todo el historial de conversaciones para el usuario autenticado
+        const { error } = await supabaseAdmin
             .from('n8n_chat_histories')
-            .select('session_id, message')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: true });
+            .delete()
+            .eq('user_id', user.id);
 
         if (error) {
-            console.error('Error fetching chat history:', error);
-            return new NextResponse('Failed to fetch chat history.', { status: 500 });
+            console.error('Error deleting chat history:', error);
+            return new NextResponse(`Failed to delete chat history: ${error.message}`, { status: 500 });
         }
 
-        return NextResponse.json({ history });
+        return new NextResponse('Chat history deleted successfully.', { status: 200 });
 
     } catch (error) {
-        console.error('API /api/chat Error:', error);
+        console.error('API /api/chat DELETE Error:', error);
         const errorMessage = error instanceof Error ? error.message : 'Internal server error';
         const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
         return new NextResponse(errorMessage, { status });
