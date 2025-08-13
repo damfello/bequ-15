@@ -39,7 +39,6 @@ async function saveMessage(userId: string, sessionId: string, content: string, t
             user_id: userId,
             session_id: sessionId,
             message: { type, content },
-            created_at: new Date().toISOString()
         });
     if (error) {
         console.error('Error saving message to history:', error);
