@@ -1,35 +1,30 @@
-// pages/page.tsx
 'use client';
 
 import React from 'react';
 
 export default function TermsAndConditionsPage() {
-  // Función para navegar de vuelta a la landing page principal
   const navigateToHome = () => {
-    window.location.href = '/'; // O '/landingpage' si esa es la ruta de tu componente principal
+    window.location.href = '/';
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-950 via-blue-900 to-indigo-950 text-white selection:bg-blue-500 selection:text-white">
-      {/* Barra de Navegación simplificada para estas páginas */}
-      <nav className="w-full p-4 sticky top-0 z-50 bg-blue-950/80 backdrop-blur-md border-b border-white/10">
+    <div className="min-h-screen bg-gray-100 text-gray-900 selection:bg-blue-600 selection:text-white">
+      <nav className="w-full p-4 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-300">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <span className="text-xl font-bold tracking-tight">BeQu | Medical Regulations AI Assistant</span>
+          <span className="text-xl font-bold tracking-tight text-gray-900">BeQu | Medical Regulations AI Assistant</span>
           <div className="space-x-4 md:space-x-6 flex items-center">
-            <button onClick={navigateToHome} className="bg-white text-blue-900 px-3 py-1 md:px-4 md:py-2 rounded-md text-sm md:text-base font-medium hover:bg-blue-100 transition duration-150 shadow">
+            <button onClick={navigateToHome} className="bg-blue-600 text-white px-3 py-1 md:px-4 md:py-2 rounded-md text-sm md:text-base font-medium hover:bg-blue-700 transition duration-150 shadow">
               Back to Home
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Contenido principal de Términos y Condiciones */}
       <main className="max-w-4xl mx-auto py-16 px-6">
-        <h1 className="text-4xl font-bold mb-4 text-center">Terms and Conditions | BeQu</h1>
-        <p className="text-blue-200 text-center mb-8">Last Updated: July 22, 2025</p>
+        <h1 className="text-4xl font-bold mb-4 text-center text-gray-900">Terms and Conditions | BeQu</h1>
+        <p className="text-gray-600 text-center mb-8">Last Updated: August 22, 2025</p>
 
-        {/* Sección de contenido con fondo blanco y texto oscuro */}
-        <section className="bg-white p-8 rounded-lg shadow-xl mb-8"> {/* Fondo blanco */}
+        <section className="bg-white p-8 rounded-lg shadow-xl mb-8 border border-gray-300">
           <p className="text-gray-700 leading-relaxed mb-4">
             Welcome to BeQu (the &quot;App&quot;), operated by Best Quality Solutions GmbH, located at Kieselstraße 6 D-51371 Leverkusen, Germany (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;). These Terms and Conditions (&quot;Terms&quot;) govern your access to and use of the BeQu app and its services.
           </p>
@@ -37,7 +32,7 @@ export default function TermsAndConditionsPage() {
             By accessing or using the App, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, please do not use the App.
           </p>
 
-          <h2 className="text-2xl font-semibold mb-4 text-gray-900">1. Acceptance of Terms</h2> {/* Título de sección más oscuro */}
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900">1. Acceptance of Terms</h2>
           <p className="text-gray-700 leading-relaxed mb-2">
             <span className="font-medium">1.1. Agreement:</span> These Terms constitute a legally binding agreement between you and Best Quality Solutions GmbH.
           </p>
@@ -178,13 +173,17 @@ export default function TermsAndConditionsPage() {
             Phone: +49 (0)173-6995506<br />
             Email: mail@bqs-gmbh.com<br />
             Fax: +49 (03212) 3927967<br />
-            <a href="https://www.bqs-gmbh.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.bqs-gmbh.com</a> {/* Enlace azul para contraste */}
+            <a href="https://www.bqs-gmbh.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.bqs-gmbh.com</a>
           </p>
         </section>
       </main>
 
-      {/* Footer simplificado */}
-      <footer className="w-full max-w-6xl mx-auto mt-12 mb-6 pt-6 border-t border-white/20 text-center text-blue-200 text-sm">
+      <footer className="w-full max-w-6xl mx-auto mt-12 mb-6 pt-6 border-t border-gray-300 text-center text-gray-600 text-sm">
+        <div className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-6 mb-4">
+          <a href="/terms-and-conditions" className="hover:text-gray-900 transition duration-150">Terms and Conditions</a>
+          <a href="/privacy-policy" className="hover:text-gray-900 transition duration-150">Privacy Policy</a>
+          <a href="/impressum" className="hover:text-gray-900 transition duration-150">Impressum</a>
+        </div>
         <p>Powered by BQS GmbH</p>
         <p>&copy; {new Date().getFullYear()} Best Quality Solutions GmbH. All rights reserved.</p>
       </footer>

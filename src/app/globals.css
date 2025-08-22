@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F9FAFB;
-  --foreground: #111827;
-  --accent: #2563EB;
-  --border-light: #E5E7EB;
-  --border-dark: #374151;
+  --background: #FFFFFF; /* Fondo blanco para un aspecto limpio */
+  --foreground: #1A1A1A; /* Texto oscuro para una alta legibilidad */
+  --accent: #2251B5;    /* Un azul profesional para botones y elementos clave */
+  --border-light: #E5E5E5; /* Borde claro */
+  --border-dark: #A0A0A0;  /* Borde oscuro para contraste */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1F2937;
-    --foreground: #E5E7EB;
-    --accent: #6366F1;
-    --border-light: #4B5563;
-    --border-dark: #374151;
+    --background: #1A1A1A; /* Dark gray for a low-key dark mode */
+    --foreground: #F5F5F5; /* Lighter text for dark mode */
+    --accent: #6486E7;     /* A purple accent in dark mode */
+    --border-light: #4A4A4A;
+    --border-dark: #6D6D6D;
   }
 }
 
@@ -24,9 +24,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Nueva clase CSS para la imagen de fondo */
-.bg-bequ-pattern {
-  background-image: url('/images/bg_bequ.jpg');
+/* New CSS for the white background image */
+.bg-bequ-white-pattern {
+  background-image: url('/images/bg_bequ2.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

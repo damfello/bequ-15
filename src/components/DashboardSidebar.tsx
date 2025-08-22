@@ -58,29 +58,29 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
     };
 
     return (
-        <aside className="w-64 bg-gray-900 text-white p-4 space-y-4 relative">
+        <aside className="w-64 bg-white text-gray-900 p-4 space-y-4 relative border-r border-gray-300">
             <h1 className="text-xl font-bold mb-4">BeQu AI</h1>
             <div className="flex items-center space-x-2">
                 <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                    <span className="text-lg font-bold">DA</span>
+                    <span className="text-lg font-bold text-white">DA</span>
                 </div>
                 <div>
                     <div className="text-sm font-semibold">{userEmail}</div>
-                    <div className="text-xs text-gray-400">Status: Active</div>
+                    <div className="text-xs text-gray-600">Status: Active</div>
                 </div>
             </div>
             
-            <hr className="border-gray-700" />
+            <hr className="border-gray-300" />
 
             <div className="space-y-2 text-sm">
-                <div className="flex items-center space-x-2 p-2 rounded-md bg-gray-800">
-                    <span className="text-green-400">●</span>
+                <div className="flex items-center space-x-2 p-2 rounded-md bg-gray-100">
+                    <span className="text-green-600">●</span>
                     <span>Status: Active</span>
                 </div>
                 
                 <button
                     onClick={onSubscriptionManage}
-                    className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2"
+                    className="w-full text-left p-2 rounded-md hover:bg-gray-200 transition flex items-center space-x-2"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 12h19.5m-16.5 3.75h16.5M7.5 19.5h9" />
@@ -91,7 +91,7 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
                 <button
                     onClick={handleDeleteHistory}
                     disabled={isDeleting}
-                    className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2 text-red-400 disabled:opacity-50"
+                    className="w-full text-left p-2 rounded-md hover:bg-gray-200 transition flex items-center space-x-2 text-red-600 disabled:opacity-50"
                 >
                     <DeleteIcon />
                     <span>{isDeleting ? 'Deleting...' : 'Delete History'}</span>
@@ -99,7 +99,7 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
             </div>
             
             <div className="absolute bottom-4 left-4 right-4">
-              <LogoutButton className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition flex items-center space-x-2" />
+              <LogoutButton className="w-full text-left p-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition flex items-center space-x-2 justify-center" />
             </div>
         </aside>
     );
