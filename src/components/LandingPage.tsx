@@ -126,16 +126,16 @@ const AccordionItem = ({ question, answer, index }: { question: string, answer: 
 // Contenido para la sección de FAQ
 const faqContent = [
   {
-    question: "What&apos;s the difference between BeQu and other popular tools like ChatGPT/Gemini, among others?",
-    answer: "There are large generalist models trained with massive databases, capable of solving any type of task. BeQu specializes solely in medical device regulations, which allows it to significantly reduce the risk of hallucinations. In medical terms, BeQu is a medical specialist, while the larger models are trained with general practitioners."
+    question: "What is the difference between BeQu and other AI popular tools?",
+    answer: "There are large generalist models trained with massive databases, capable of solving any type of task. BeQu specializes solely in medical device regulations, which allows it to significantly reduce the risk of hallucinations."
   },
   {
     question: "What is the difference between the Standard and Plus plans?",
     answer: "The BeQu Standard plan has access to a limited number of regulations, 6 in total. The Plus plan allows you to access a total of 10 fully updated regulatory documents."
   },
   {
-    question: "How much can I trust the information BeQu provides?",
-    answer: "BeQu has access to a controlled database of official medical regulation documents, allowing us to provide you with reliable information directly from the source. However, BeQu is a company focused on facilitating your access to information. However, at no point does BeQu replace the judgment of a professional. BeQu allows you to understand the complex world of medical regulations."
+    question: "What is the level of confidence one can place in career guidance services that adhere to the BeQu quality standards?",
+    answer: "BeQu is a set of quality standards developed in Germany for career guidance and counseling. Its purpose is to provide a framework for ensuring that professional guidance services are of high quality. It is important to clarify that BeQu does not replace the professional judgment of an expert consultant in medical device regulations."
   }
 ];
 
