@@ -25,7 +25,7 @@ export default function TermsAndConditionsPage() {
       {/* Contenido principal de Términos y Condiciones */}
       <main className="max-w-4xl mx-auto py-16 px-6">
         <h1 className="text-4xl font-bold mb-4 text-center">Terms and Conditions | BeQu</h1>
-        <p className="text-blue-200 text-center mb-8">Last Updated: July 14, 2025</p>
+        <p className="text-blue-200 text-center mb-8">Last Updated: August 22, 2025</p>
 
         {/* Sección de contenido con fondo blanco y texto oscuro */}
         <section className="bg-white p-8 rounded-lg shadow-xl mb-8"> {/* Fondo blanco */}
@@ -108,11 +108,14 @@ export default function TermsAndConditionsPage() {
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">6. Privacy Policy and GDPR Compliance</h2>
+            <p className="text-gray-700 leading-relaxed mb-2">
+            <span className="font-medium">6.1. Data Protection:</span> Your privacy is very important to us. Our collection, use, and processing of your personal data are governed by our Privacy Policy, which is incorporated into these Terms by reference.
+          </p>
           <p className="text-gray-700 leading-relaxed mb-2">
             <span className="font-medium">6.1. Data Protection:</span> Your privacy is very important to us. Our collection, use, and processing of your personal data are governed by our Privacy Policy, which is incorporated into these Terms by reference.
           </p>
           <p className="text-gray-700 leading-relaxed mb-2">
-            <span className="font-medium">6.2. GDPR Compliance:</span> As we are located in Europe, we are committed to complying with the General Data Protection Regulation (GDPR). Our Privacy Policy details:
+            <span className="font-medium">6.2. GDPR Compliance:</span> BeQu stores the information users share with it, in compliance with GDPR policies, using a data anonymization method that protects each user's personal information. However, this storage of information is done to improve the user experience and offer advanced features, such as displaying each user's private chat history. It's also worth noting that BeQu's database is located on local servers in Europe, specifically in Germany. Our Privacy Policy details:
           </p>
           <ul className="list-disc list-inside text-gray-700 ml-4 mb-4">
             <li>The types of personal data we collect.</li>
