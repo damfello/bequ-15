@@ -26,7 +26,7 @@ export default function TermsAndConditionsPage() {
       {/* Contenido principal de Términos y Condiciones */}
       <main className="max-w-4xl mx-auto py-16 px-6">
         <h1 className="text-4xl font-bold mb-4 text-center">Terms and Conditions | BeQu</h1>
-        <p className="text-blue-200 text-center mb-8">Last Updated: August 22, 2025</p>
+        <p className="text-blue-200 text-center mb-8">Last Updated: July 22, 2025</p>
 
         {/* Sección de contenido con fondo blanco y texto oscuro */}
         <section className="bg-white p-8 rounded-lg shadow-xl mb-8"> {/* Fondo blanco */}
@@ -130,7 +130,7 @@ export default function TermsAndConditionsPage() {
           </p>
           
           <p className="text-gray-700 leading-relaxed mb-4">
-            <span className="font-medium">6.4. Data Storage and Anonymization:</span> BeQu stores the information users share with it in compliance with GDPR policies. We use a data anonymization method that protects each user's personal information. This information is stored to improve the user experience and offer advanced features, such as displaying each user's private chat history. The BeQu database is located on local servers in Europe, specifically in Germany.
+            <span className="font-medium">6.4. Data Storage and Anonymization:</span> BeQu stores the information users share with it in compliance with GDPR policies, using a data anonymization method that protects each user&apos;s personal information. This information is stored to improve the user experience and offer advanced features, such as displaying each user&apos;s private chat history. The BeQu database is located on local servers in Europe, specifically in Germany.
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">7. Disclaimers</h2>
