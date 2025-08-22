@@ -223,7 +223,6 @@ export default function LandingPage() {
               <span className="text-2xl text-blue-100">Self-explanatory</span>
               <span className="text-3xl font-semibold text-blue-200">Time-saving</span>
               <span className="text-xl text-blue-400">Easy access</span>
-              <span className="text-4xl font-bold text-blue-300">Easy to use</span>
               <span className="text-3xl font-semibold text-blue-100">Clear Answers</span>
               <span className="text-2xl text-blue-200">Simplified regulations</span>
             </div>
