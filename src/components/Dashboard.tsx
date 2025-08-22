@@ -1,3 +1,4 @@
+// src/components/Dashboard.tsx
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -48,7 +49,6 @@ export default function Dashboard({ session }: DashboardProps) {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
-    // FIX: Lógica para manejar la redirección a Stripe, llamando a tu endpoint original
     const handleSubscriptionManage = async () => {
         try {
             const accessToken = session?.access_token;
@@ -56,7 +56,6 @@ export default function Dashboard({ session }: DashboardProps) {
                 throw new Error('No active session found.');
             }
 
-            // Llama a tu API original
             const response = await fetch('/api/portal_sessions', {
                 method: 'POST',
                 headers: {
@@ -72,7 +71,6 @@ export default function Dashboard({ session }: DashboardProps) {
 
             const data = await response.json();
             if (data.portalUrl) {
-                // Redirige al usuario a la URL del portal de Stripe
                 router.push(data.portalUrl);
             } else {
                 throw new Error('No portal URL returned from API.');
@@ -99,7 +97,7 @@ export default function Dashboard({ session }: DashboardProps) {
             />
             
             <div className="flex flex-col flex-1">
-                <header className="p-4 bg-white shadow-sm flex items-center justify-between">
+                <header className="p-4 bg-white shadow-sm flex items-center justify-between border-b border-gray-200">
                     <h2 className="text-xl font-bold">BeQu AI Assistant</h2>
                 </header>
                 
@@ -121,7 +119,7 @@ export default function Dashboard({ session }: DashboardProps) {
                                 onClick={handleSubscription}
                                 disabled={isSubscribing}
                                 className={`mt-4 w-full max-w-xs mx-auto font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${
-                                    isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 text-white'
+                                    isSubscribing ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
                                 }`}
                             >
                                 {isSubscribing ? 'Processing...' : 'Subscribe Now'}

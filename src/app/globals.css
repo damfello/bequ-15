@@ -1,33 +1,42 @@
-@import "tailwindcss";
+/* src/app/globals.css */
 
+/*
+  Paleta de colores limpia y moderna.
+  Utilizamos variables CSS para una fácil personalización.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F9FAFB; /* Un gris claro muy sutil para un fondo limpio */
+  --foreground: #111827; /* Carbón profundo para el texto principal */
+  --accent: #2563EB; /* Un azul vibrante y profesional para elementos clave */
+  --accent-hover: #1D4ED8; /* Un azul más oscuro para los estados hover */
+  --border-light: #E5E7EB; /* Un borde sutil para elementos de UI */
+  --border-dark: #374151; /* Un borde más oscuro para contraste */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/*
+  Estilos para el tema oscuro, que se activará si el sistema operativo lo prefiere.
+*/
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1F2937; /* Gris oscuro para un modo oscuro elegante */
+    --foreground: #E5E7EB; /* Texto claro para una mejor legibilidad */
+    --accent: #60A5FA; /* Un azul más claro para el modo oscuro */
+    --accent-hover: #3B82F6; /* Un azul intermedio para los estados hover */
+    --border-light: #4B5563;
+    --border-dark: #374151;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif; /* Usamos una fuente moderna y legible */
 }
 
-/* Custom styles for the "Sign up" link in Supabase Auth UI */
-/* Targeting the specific class and the href attribute for precision */
+/*
+  Estilos personalizados para el enlace de registro de Supabase Auth UI.
+*/
 .supabase-auth-ui_ui-anchor[href="#auth-sign-up"] {
-  font-size: 1.3em !important; /* AHORA MÁS GRANDE - AJUSTA ESTE VALOR */
+  font-size: 1.3em !important;
   font-weight: bold !important;
 }
