@@ -213,25 +213,19 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Sección de Testimonios de Usuarios */}
+   {/* Sección de Testimonios de Usuarios (Actualizada para Nube de Palabras Clave) */}
       <section id="testimonials" className="py-16 md:py-20 px-6">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-10">What Our Users Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15 text-center flex flex-col justify-center">
-              <p className="text-xl font-bold text-blue-100">Easy to use</p>
-            </div>
-            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15 text-center flex flex-col justify-center">
-              <p className="text-xl font-bold text-blue-100">Self-explanatory</p>
-              <p className="text-sm text-blue-200 mt-2">"It is self-explanatory and relatively easy to use."</p>
-            </div>
-            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15 text-center flex flex-col justify-center">
-              <p className="text-xl font-bold text-blue-100">Time-saving</p>
-              <p className="text-sm text-blue-200 mt-2">"BeQu has saved me time compared to other methods of consulting about medical device regulation."</p>
-            </div>
-            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm transform transition duration-300 hover:scale-105 hover:bg-white/15 text-center flex flex-col justify-center">
-              <p className="text-xl font-bold text-blue-100">Clear Answers</p>
-              <p className="text-sm text-blue-200 mt-2">"The answer was easy to understand."</p>
+          <div className="bg-white/10 p-8 rounded-lg backdrop-blur-sm shadow-xl border border-gray-700/50">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+              <span className="text-4xl font-bold text-blue-300">Easy to use</span>
+              <span className="text-2xl text-blue-100">Self-explanatory</span>
+              <span className="text-3xl font-semibold text-blue-200">Time-saving</span>
+              <span className="text-xl text-blue-400">Easy access</span>
+              <span className="text-4xl font-bold text-blue-300">Easy to use</span>
+              <span className="text-3xl font-semibold text-blue-100">Clear Answers</span>
+              <span className="text-2xl text-blue-200">Simplified regulations</span>
             </div>
           </div>
         </div>
