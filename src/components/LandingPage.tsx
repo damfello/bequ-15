@@ -213,7 +213,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-   {/* Sección de Testimonios de Usuarios (Actualizada para Nube de Palabras Clave) */}
+      {/* Sección de Testimonios de Usuarios (Actualizada para Nube de Palabras Clave) */}
       <section id="testimonials" className="py-16 md:py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-10">What Our Users Say</h2>
