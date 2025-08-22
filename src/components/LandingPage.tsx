@@ -249,7 +249,7 @@ export default function LandingPage() {
                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Database on local European servers</li>
                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Cancel Anytime</li>
                </ul>
-               <button onClick={navigateToLogin} className="w-full bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold py-3 rounded-md transition duration-150 shadow-md"> Sign Up to Subscribe </button>
+               <button onClick={navigateToLogin} className="w-full bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold py-3 rounded-md transition duration-150 shadow-md"> Subscribe </button>
             </div>
           </div>
       </section>
