@@ -24,17 +24,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* New CSS for the background image */
+/* Nueva clase CSS para la imagen de fondo */
 .bg-bequ-pattern {
-  background-image: url('/images/abstract-background-with-low-poly-design (1).jpg');
+  background-image: url('/images/bg_bequ.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Optional: for a parallax effect */
-}
-
-/* Utility class for a dark overlay on top of the image */
-.bg-overlay-dark {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-attachment: fixed;
 }
 
 .supabase-auth-ui_ui-anchor[href="#auth-sign-up"] {
