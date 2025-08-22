@@ -1,4 +1,3 @@
-// src/components/DashboardSidebar.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -60,10 +59,10 @@ export default function DashboardSidebar({ onHistoryDeleted, session, onSubscrip
 
     return (
         <aside className="w-64 bg-gray-900 text-white p-4 space-y-4 relative">
-            <h1 className="text-xl font-bold mb-4 text-blue-400">BeQu</h1>
+            <h1 className="text-xl font-bold mb-4">BeQu AI</h1>
             <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
-                    <span className="text-lg font-bold text-white">DA</span>
+                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                    <span className="text-lg font-bold">DA</span>
                 </div>
                 <div>
                     <div className="text-sm font-semibold">{userEmail}</div>

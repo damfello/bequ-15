@@ -1,27 +1,18 @@
-/* src/app/globals.css */
+@import "tailwindcss";
 
-/*
-  Paleta de colores limpia y moderna.
-  Utilizamos variables CSS para una fácil personalización.
-*/
 :root {
-  --background: #F9FAFB; /* Un gris claro muy sutil para un fondo limpio */
-  --foreground: #111827; /* Carbón profundo para el texto principal */
-  --accent: #2563EB; /* Un azul vibrante y profesional para elementos clave */
-  --accent-hover: #1D4ED8; /* Un azul más oscuro para los estados hover */
-  --border-light: #E5E7EB; /* Un borde sutil para elementos de UI */
-  --border-dark: #374151; /* Un borde más oscuro para contraste */
+  --background: #F9FAFB; /* Light gray for a clean, modern look */
+  --foreground: #111827; /* Deep charcoal for main text */
+  --accent: #2563EB; /* A professional blue for buttons and highlights */
+  --border-light: #E5E7EB; /* Light border color */
+  --border-dark: #374151; /* Dark border color for contrast */
 }
 
-/*
-  Estilos para el tema oscuro, que se activará si el sistema operativo lo prefiere.
-*/
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1F2937; /* Gris oscuro para un modo oscuro elegante */
-    --foreground: #E5E7EB; /* Texto claro para una mejor legibilidad */
-    --accent: #60A5FA; /* Un azul más claro para el modo oscuro */
-    --accent-hover: #3B82F6; /* Un azul intermedio para los estados hover */
+    --background: #1F2937; /* Dark gray for a low-key dark mode */
+    --foreground: #E5E7EB; /* Lighter text for dark mode */
+    --accent: #6366F1; /* A purple accent in dark mode */
     --border-light: #4B5563;
     --border-dark: #374151;
   }
@@ -30,12 +21,9 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', sans-serif; /* Usamos una fuente moderna y legible */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/*
-  Estilos personalizados para el enlace de registro de Supabase Auth UI.
-*/
 .supabase-auth-ui_ui-anchor[href="#auth-sign-up"] {
   font-size: 1.3em !important;
   font-weight: bold !important;
