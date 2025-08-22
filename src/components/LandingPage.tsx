@@ -218,12 +218,18 @@ export default function LandingPage() {
         <div className="max-w-md mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-10 text-center">Simple, Powerful Plan</h2>
             <div className="bg-gray-900/80 rounded-lg shadow-2xl p-8 backdrop-blur-md border border-gray-700 transform transition duration-300 hover:scale-[1.02]">
-               <h3 className="text-xl font-semibold mb-2 text-center text-blue-100">Monthly Standard | Current price under review. The price of the final BeQu App version may change. </h3>
+               <h3 className="text-xl font-semibold mb-2 text-center text-blue-100"> Monthly Standard </h3>
                <p className="text-4xl font-bold my-3 text-center text-white">€35 <span className="text-lg font-normal text-blue-200">/ month</span></p>
                <ul className="space-y-3 my-6 text-blue-100 text-sm">
-                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to MDR Knowledge Base</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to document information: MDCG 2023-5</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to document information: MDCG 2020-3</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to document information: IEC 62304:2006</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to document information: ISO 13485</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to document information: ISO 14971</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Access to document information: Regulation (EU) 2017/745</li>
                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Advanced AI Question Answering</li>
                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Secure & Private Chats</li>
+                 <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Database on local European servers</li>
                  <li className="flex items-center"><span className="text-green-400 mr-2.5">✓</span> Cancel Anytime</li>
                </ul>
                <button onClick={navigateToLogin} className="w-full bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold py-3 rounded-md transition duration-150 shadow-md"> Sign Up to Subscribe </button>
