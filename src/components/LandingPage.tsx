@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import AnimatedText from '@/components/ui/AnimatedText';
-
+import Image from 'next/image';
 
 // Inline SVG for FiChevronDown
 const ChevronDownIcon = ({ isOpen }: { isOpen: boolean }) => (
@@ -36,7 +36,7 @@ const BookOpenIcon = () => (
     className="text-blue-600 text-4xl mb-4 mx-auto"
   >
     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 4 0 0 1 3-3h7z"></path>
   </svg>
 );
 // Inline SVG for FiCpu
@@ -176,6 +176,60 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Nueva Sección: What can we do for you? */}
+        <section id="what-we-do" className="py-16 md:py-20 px-6 bg-gray-100">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">What can we do for you?</h2>
+              <p className="max-w-2xl mx-auto mt-4 text-gray-700">
+                BeQu is your AI assistant for MedTech regulatory compliance. Get immediate clarity on the complex world of medical device regulations in Europe.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-12">
+              <div className="md:order-2">
+                <h3 className="text-2xl font-bold mb-3" style={{ color: '#2251B5' }}>
+                  Specialized in understanding the complex world of MedTech regulations
+                </h3>
+                <p className="text-lg text-gray-700">
+                  Our expertise helps companies navigate compliance challenges with confidence. From medical device classifications to regulatory monitoring, we simplify every step. With BeQu, turning complexity into clarity becomes your competitive advantage.
+                </p>
+              </div>
+              <div className="md:order-1">
+                <Image src="/images/complex_bequ.jpg" alt="Person working on a laptop" width={600} height={400} className="rounded-lg shadow-lg"/>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-12">
+              <div>
+                <h3 className="text-2xl font-bold mb-3" style={{ color: '#2251B5' }}>
+                  Focus on what really matters. Bringing your innovation to life.
+                </h3>
+                <p className="text-lg text-gray-700">
+                  BeQu helps you navigate the regulatory maze with ease and precision. We take care of compliance so you can focus on launching your medical device. Enter the European market faster, with confidence and peace of mind.
+                </p>
+              </div>
+              <div>
+                <Image src="/images/concentraded_man.png" alt="Person smiling" width={600} height={400} className="rounded-lg shadow-lg"/>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div className="md:order-2">
+                <h3 className="text-2xl font-bold mb-3" style={{ color: '#2251B5' }}>
+                  Develop the roadmap for your medical device regulation in the EU-market
+                </h3>
+                <p className="text-lg text-gray-700">
+                  BeQu guides you through every step of EU medical device regulations. From strategy to execution, we turn complexity into a clear plan. Accelerate compliance and reach the European market with confidence.
+                </p>
+              </div>
+              <div className="md:order-1">
+                <Image src="/images/roadmap_bequ.jpg" alt="People in a meeting" width={600} height={400} className="rounded-lg shadow-lg"/>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         {/* Sección Features */}
         <section id="features" className="py-16 md:py-20 px-6">
           <div className="max-w-6xl mx-auto text-center">
@@ -261,8 +315,8 @@ export default function LandingPage() {
         {/* Sección Authentication */}
         <section id="auth" className="py-16 md:py-20 px-6">
             <div className="max-w-md mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-900">Ready to Get Started?</h2>
-              <p className="text-gray-700 mb-6">Create an account or log in to subscribe and access BeQu AI.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-900">Get Started Now</h2>
+              <p className="text-gray-700 mb-6">Create your account with BeQu and start your journey toward medical device regulation.</p>
               <button onClick={navigateToLogin} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-base font-medium transition duration-150 shadow-md"> Login / Sign Up </button>
             </div>
         </section>
