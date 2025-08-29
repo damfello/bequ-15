@@ -148,7 +148,7 @@ export default function LandingPage() {
         {/* Barra de Navegación */}
         <nav className="w-full p-4 sticky top-0 z-50 bg-white/60 backdrop-blur-md border-b border-gray-300">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <span className="text-xl font-bold tracking-tight text-gray-900">BeQu | Medical Regulations AI Assistant</span>
+            <span className="text-xl font-bold tracking-tight text-gray-900">BeQu | MedTech Regulations Assistant</span>
             <div className="space-x-4 md:space-x-6 flex items-center">
               <button onClick={() => handleScrollTo('features')} className="text-sm md:text-base text-gray-600 hover:text-gray-900 transition duration-150">Features</button>
               <button onClick={() => handleScrollTo('pricing')} className="text-sm md:text-base text-gray-600 hover:text-gray-900 transition duration-150">Pricing</button>
