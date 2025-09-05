@@ -15,7 +15,7 @@ export default function AuthUI() {
         appearance={{ theme: ThemeSupa }}
         theme="light"
         // --- MODIFIED providers prop ---
-        providers={[]} // Add 'Google' providers={['google']} 
+        providers={[]} // Add 'Google' providers={['google']}
         // --- END MODIFIED providers prop ---
         redirectTo={redirectTo}
         localization={{
