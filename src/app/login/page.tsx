@@ -1,12 +1,38 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 import AuthUI from '@/components/AuthUI';
 import Link from 'next/link';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showTermsError, setShowTermsError] = useState(false);
 
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        console.log("User already logged in, redirecting from /login to /");
+        router.replace('/');
+      }
+    };
+    checkSession();
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        console.log("Auth state changed to logged in on /login, redirecting to /");
+        router.replace('/');
+      }
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [router]);
+
+  // Se envuelve la función en useCallback para que solo se cree una vez
+  // y se puede usar en el array de dependencias.
   const setupAuthUIObserver = useCallback(() => {
     const authUiContainer = document.getElementById('auth-ui-container');
 
@@ -78,17 +104,18 @@ export default function LoginPage() {
 
     observer.observe(authUiContainer, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, [setShowTermsError]);
+  }, [setShowTermsError]); // setShowTermsError debe estar en el array de dependencias
 
   useEffect(() => {
     setupAuthUIObserver();
   }, [setupAuthUIObserver]);
 
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
       <div className="absolute top-4 left-4">
-        <Link
-          href="/"
+        <Link 
+          href="/" 
           className="inline-block px-4 py-2 text-sm font-semibold text-white transition duration-150 rounded-md shadow-md bg-blue-600 hover:bg-blue-700"
         >
           Back to Home
