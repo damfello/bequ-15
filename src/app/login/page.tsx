@@ -1,13 +1,10 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import AuthUI from '@/components/AuthUI';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabaseClient';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [showTermsError, setShowTermsError] = useState(false);
 
   // Se envuelve la función en useCallback para que solo se cree una vez
