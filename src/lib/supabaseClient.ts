@@ -9,5 +9,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Supabase URL or Anon Key is missing in .env.local');
 }
 
-// Create and export the Supabase client instance
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Create and export the Supabase client instance with the correct flow type
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseAnonKey,
+  {
+    auth: {
+      flowType: 'pkce',
+    },
+  }
+);
