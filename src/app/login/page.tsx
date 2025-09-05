@@ -10,26 +10,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [showTermsError, setShowTermsError] = useState(false);
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        console.log("User already logged in, redirecting from /login to /");
-        router.replace('/');
-      }
-    };
-    checkSession();
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        console.log("Auth state changed to logged in on /login, redirecting to /");
-        router.replace('/');
-      }
-    });
 
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [router]);
 
   // Se envuelve la función en useCallback para que solo se cree una vez
   // y se puede usar en el array de dependencias.
