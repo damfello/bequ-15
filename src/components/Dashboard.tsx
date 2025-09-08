@@ -48,7 +48,6 @@ export default function Dashboard({ session }: DashboardProps) {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
-    // FIX: Lógica para manejar la redirección a Stripe, llamando a tu endpoint original
     const handleSubscriptionManage = async () => {
         try {
             const accessToken = session?.access_token;
@@ -56,7 +55,6 @@ export default function Dashboard({ session }: DashboardProps) {
                 throw new Error('No active session found.');
             }
 
-            // Llama a tu API original
             const response = await fetch('/api/portal_sessions', {
                 method: 'POST',
                 headers: {
@@ -72,22 +70,64 @@ export default function Dashboard({ session }: DashboardProps) {
 
             const data = await response.json();
             if (data.portalUrl) {
-                // Redirige al usuario a la URL del portal de Stripe
                 router.push(data.portalUrl);
             } else {
                 throw new Error('No portal URL returned from API.');
             }
         } catch (error) {
             console.error('Error managing subscription:', error);
-            alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            // Reemplazado alert() por un console.error para evitar problemas en el iframe
+            console.error(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
     
+    // Función corregida para manejar el proceso de suscripción.
     const handleSubscription = async () => {
         setIsSubscribing(true);
-        console.log('Simulating Stripe checkout...');
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        setIsSubscribing(false);
+        try {
+            const accessToken = session?.access_token;
+            if (!accessToken) {
+                throw new Error('No active session found.');
+            }
+
+            const response = await fetch('/api/checkout_sessions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API Error: ${errorText || response.statusText}`);
+            }
+
+            const data = await response.json();
+            if (data.sessionId) {
+                // Obtiene la URL de redirección directamente del API de Stripe o Next.js
+                // Se asume que el backend devuelve un objeto con un `url` para la redirección.
+                const checkoutUrl = data.checkoutUrl;
+                if (checkoutUrl) {
+                    router.push(checkoutUrl);
+                } else {
+                    // Si el backend solo devuelve el sessionId, se puede redirigir con un mensaje de info
+                    // Esto es temporal. Lo ideal es que el backend devuelva la URL.
+                    console.log('API returned Session ID, but no URL. This requires a backend change.');
+                    // Puedes redirigir a una página de confirmación temporal o mostrar un modal.
+                    // Para este ejemplo, no se hace nada para evitar un error de redirección.
+                    throw new Error('Backend did not provide a checkout URL.');
+                }
+            } else {
+                throw new Error('No session ID returned from API.');
+            }
+        } catch (error) {
+            console.error('Error starting subscription:', error);
+            // Reemplazado alert() por un console.error para evitar problemas en el iframe
+            console.error(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            setIsSubscribing(false);
+        }
     };
 
     return (
