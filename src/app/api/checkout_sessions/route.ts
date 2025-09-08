@@ -67,33 +67,24 @@ export async function POST(req: NextRequest) {
       success_url: success_url,
       cancel_url: cancel_url,
       allow_promotion_codes: true, // Permitir códigos de promoción
-
-      // --- CAMBIOS SUGERIDOS PARA LA PRUEBA GRATUITA SIN TARJETA ---
-      // 1. Indicar a Stripe que solo pida el método de pago si es estrictamente necesario
-      payment_method_collection: 'if_required',
-      // 2. Definir un período de prueba de 30 días para la suscripción
       subscription_data: {
         trial_period_days: 30, // 30 días de prueba gratuita
       },
-      // --- FIN DE LOS CAMBIOS SUGERIDOS ---
-
-      // Usar el ID de usuario validado de forma segura
       client_reference_id: user.id,
-      // Usar el correo electrónico de usuario validado de forma segura
       customer_email: user.email,
     });
 
-    if (!checkoutSession?.id) {
-        throw new Error('Could not create Stripe Checkout Session');
+    if (!checkoutSession?.id || !checkoutSession?.url) {
+        throw new Error('Could not create Stripe Checkout Session.');
     }
 
-    // 4. Return the session ID
-    return NextResponse.json({ sessionId: checkoutSession.id });
+    // 4. Return the session ID AND the URL for redirection.
+    // MODIFICACIÓN: Se añade `checkoutUrl` a la respuesta.
+    return NextResponse.json({ sessionId: checkoutSession.id, checkoutUrl: checkoutSession.url });
 
   } catch (error) {
     console.error('API Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
-    // Determine status code based on error message
     const status = errorMessage.includes('Authorization') || errorMessage.includes('token') ? 401 : 500;
     return new NextResponse(errorMessage, { status });
   }
