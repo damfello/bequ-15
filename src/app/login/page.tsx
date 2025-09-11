@@ -1,21 +1,21 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import AuthUI from '@/components/AuthUI';
 import Link from 'next/link';
+import dynamic from 'next/dynamic'; // Importar dynamic
+
+// Cargar dinámicamente el componente de mensaje de confirmación,
+// asegurando que solo se renderice en el cliente (ssr: false)
+const DynamicConfirmationMessage = dynamic(() => import('@/components/ConfirmationMessage'), {
+  ssr: false,
+});
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [showTermsError, setShowTermsError] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
-  const [isClient, setIsClient] = useState(false); // Nuevo estado para verificar si es el cliente
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     // Maneja la redirección si el usuario ya está autenticado
@@ -41,15 +41,6 @@ export default function LoginPage() {
       authListener?.subscription.unsubscribe();
     };
   }, [router]);
-
-  useEffect(() => {
-    // Lee el parámetro de confirmación de email de la URL solo en el cliente
-    if (isClient && searchParams.get('message') === 'confirmed') {
-      setShowMessage(true);
-      // Para limpiar la URL después de mostrar el mensaje
-      router.replace('/login');
-    }
-  }, [isClient, searchParams, router]);
 
   const setupAuthUIObserver = useCallback(() => {
     const authUiContainer = document.getElementById('auth-ui-container');
@@ -132,19 +123,16 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
       <div className="absolute top-4 left-4">
-        <Link
-          href="/"
+        <Link 
+          href="/" 
           className="inline-block px-4 py-2 text-sm font-semibold text-white transition duration-150 rounded-md shadow-md bg-blue-600 hover:bg-blue-700"
         >
           Back to Home
         </Link>
       </div>
-
-      {showMessage && (
-        <div className="w-full max-w-md p-4 mb-4 text-sm text-green-800 bg-green-100 rounded-lg shadow" role="alert">
-          Email confirmed! Please log in to continue.
-        </div>
-      )}
+      
+      {/* Usar el componente dinámico para el mensaje de confirmación */}
+      <DynamicConfirmationMessage />
 
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md" id="auth-ui-container">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-4">
