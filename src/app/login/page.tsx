@@ -1,31 +1,121 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // Importa useSearchParams
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import AuthUI from '@/components/AuthUI';
 import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // Hook para leer parámetros de la URL
+  const searchParams = useSearchParams();
   const [showTermsError, setShowTermsError] = useState(false);
-  const [showMessage, setShowMessage] = useState(false); // Nuevo estado para el mensaje
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
-    // Lee el parámetro 'message' de la URL
+    // Maneja la redirección si el usuario ya está autenticado
+    const checkSessionAndRedirect = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        console.log("User already logged in, redirecting from /login to /");
+        router.replace('/');
+      }
+    };
+    checkSessionAndRedirect();
+
+    // Configura el listener para cambios de autenticación
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        console.log("Auth state changed to logged in on /login, redirecting to /");
+        router.replace('/');
+      }
+    });
+
+    // Lee el parámetro de confirmación de email de la URL
     if (searchParams.get('message') === 'confirmed') {
       setShowMessage(true);
-      // Puedes limpiar el parámetro de la URL si lo deseas
-      // router.replace('/login', { shallow: true });
+      // Para limpiar la URL después de mostrar el mensaje
+      router.replace('/login');
     }
-  }, [searchParams]);
 
-  //... (el resto de tu código useEffect y setupAuthUIObserver)
+    // Limpia el listener al desmontar el componente
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [router, searchParams]);
+
   const setupAuthUIObserver = useCallback(() => {
     const authUiContainer = document.getElementById('auth-ui-container');
-//... (el resto de tu código setupAuthUIObserver)
-  }, [setShowTermsError]);
+
+    if (!authUiContainer) {
+      console.warn("AuthUI container not found. Terms and Conditions checkbox may not be injected.");
+      const fallbackObserver = new MutationObserver((mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+          if (mutation.type === 'childList' && document.getElementById('auth-ui-container')) {
+            observer.disconnect();
+            setupAuthUIObserver();
+            return;
+          }
+        }
+      });
+      fallbackObserver.observe(document.body, { childList: true, subtree: true });
+      return () => fallbackObserver.disconnect();
+    }
+
+    const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          const signupForm = document.querySelector('form#auth-sign-up');
+          const termsCheckboxContainer = document.getElementById('terms-checkbox-container');
+
+          if (signupForm && !termsCheckboxContainer) {
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+
+            if (submitButton) {
+              const newDiv = document.createElement('div');
+              newDiv.id = 'terms-checkbox-container';
+              newDiv.className = 'mb-4 text-sm text-gray-700';
+
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.id = 'terms-checkbox';
+              checkbox.className = 'mr-2';
+
+              const label = document.createElement('label');
+              label.htmlFor = 'terms-checkbox';
+              label.innerHTML = `I agree to the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Terms and Conditions</a>`;
+
+              newDiv.appendChild(checkbox);
+              newDiv.appendChild(label);
+
+              submitButton.parentNode?.insertBefore(newDiv, submitButton);
+
+              const handleSubmit = (e: Event) => {
+                if (!checkbox.checked) {
+                  e.preventDefault();
+                  setShowTermsError(true);
+                } else {
+                  setShowTermsError(false);
+                }
+              };
+
+              signupForm.addEventListener('submit', handleSubmit);
+
+              observer.disconnect();
+              observer.observe(authUiContainer, { childList: true, subtree: true });
+              return;
+            }
+          } else if (!signupForm && termsCheckboxContainer) {
+            termsCheckboxContainer.remove();
+            setShowTermsError(false);
+          }
+        }
+      }
+    });
+
+    observer.observe(authUiContainer, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []); // Se eliminó setShowTermsError del array de dependencias
 
   useEffect(() => {
     setupAuthUIObserver();
@@ -42,8 +132,7 @@ export default function LoginPage() {
           Back to Home
         </Link>
       </div>
-
-      {/* Nuevo mensaje de confirmación */}
+      
       {showMessage && (
         <div className="w-full max-w-md p-4 mb-4 text-sm text-green-800 bg-green-100 rounded-lg shadow" role="alert">
           Email confirmed! Please log in to continue.
