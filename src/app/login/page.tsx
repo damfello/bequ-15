@@ -11,6 +11,11 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const [showTermsError, setShowTermsError] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  const [isClient, setIsClient] = useState(false); // Nuevo estado para verificar si es el cliente
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     // Maneja la redirección si el usuario ya está autenticado
@@ -31,18 +36,20 @@ export default function LoginPage() {
       }
     });
 
-    // Lee el parámetro de confirmación de email de la URL
-    if (searchParams.get('message') === 'confirmed') {
-      setShowMessage(true);
-      // Para limpiar la URL después de mostrar el mensaje
-      router.replace('/login');
-    }
-
     // Limpia el listener al desmontar el componente
     return () => {
       authListener?.subscription.unsubscribe();
     };
-  }, [router, searchParams]);
+  }, [router]);
+
+  useEffect(() => {
+    // Lee el parámetro de confirmación de email de la URL solo en el cliente
+    if (isClient && searchParams.get('message') === 'confirmed') {
+      setShowMessage(true);
+      // Para limpiar la URL después de mostrar el mensaje
+      router.replace('/login');
+    }
+  }, [isClient, searchParams, router]);
 
   const setupAuthUIObserver = useCallback(() => {
     const authUiContainer = document.getElementById('auth-ui-container');
@@ -115,7 +122,7 @@ export default function LoginPage() {
 
     observer.observe(authUiContainer, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, []); // Se eliminó setShowTermsError del array de dependencias
+  }, []);
 
   useEffect(() => {
     setupAuthUIObserver();
@@ -125,14 +132,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
       <div className="absolute top-4 left-4">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-block px-4 py-2 text-sm font-semibold text-white transition duration-150 rounded-md shadow-md bg-blue-600 hover:bg-blue-700"
         >
           Back to Home
         </Link>
       </div>
-      
+
       {showMessage && (
         <div className="w-full max-w-md p-4 mb-4 text-sm text-green-800 bg-green-100 rounded-lg shadow" role="alert">
           Email confirmed! Please log in to continue.
