@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// Option required for Route Handlers that use cookies
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
@@ -24,6 +23,6 @@ export async function GET(request: NextRequest) {
     console.warn('No code found in auth callback URL');
   }
 
-  // Redirect back to the home page, clearing the URL
-  return NextResponse.redirect(new URL('/', requestUrl.origin));
+  // REDIRECCION CORREGIDA: Redirigir a la página de login con un mensaje de confirmación
+  return NextResponse.redirect(new URL('/login?message=confirmed', requestUrl.origin));
 }

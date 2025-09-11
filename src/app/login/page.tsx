@@ -1,110 +1,31 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'; // Importa useSearchParams
 import { supabase } from '@/lib/supabaseClient';
 import AuthUI from '@/components/AuthUI';
 import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams(); // Hook para leer parámetros de la URL
   const [showTermsError, setShowTermsError] = useState(false);
+  const [showMessage, setShowMessage] = useState(false); // Nuevo estado para el mensaje
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        console.log("User already logged in, redirecting from /login to /");
-        router.replace('/');
-      }
-    };
-    checkSession();
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        console.log("Auth state changed to logged in on /login, redirecting to /");
-        router.replace('/');
-      }
-    });
+    // Lee el parámetro 'message' de la URL
+    if (searchParams.get('message') === 'confirmed') {
+      setShowMessage(true);
+      // Puedes limpiar el parámetro de la URL si lo deseas
+      // router.replace('/login', { shallow: true });
+    }
+  }, [searchParams]);
 
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [router]);
-
-  // Se envuelve la función en useCallback para que solo se cree una vez
-  // y se puede usar en el array de dependencias.
+  //... (el resto de tu código useEffect y setupAuthUIObserver)
   const setupAuthUIObserver = useCallback(() => {
     const authUiContainer = document.getElementById('auth-ui-container');
-
-    if (!authUiContainer) {
-      console.warn("AuthUI container not found. Terms and Conditions checkbox may not be injected.");
-      const fallbackObserver = new MutationObserver((mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-          if (mutation.type === 'childList' && document.getElementById('auth-ui-container')) {
-            observer.disconnect();
-            setupAuthUIObserver();
-            return;
-          }
-        }
-      });
-      fallbackObserver.observe(document.body, { childList: true, subtree: true });
-      return () => fallbackObserver.disconnect();
-    }
-
-    const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          const signupForm = document.querySelector('form#auth-sign-up');
-          const termsCheckboxContainer = document.getElementById('terms-checkbox-container');
-
-          if (signupForm && !termsCheckboxContainer) {
-            const submitButton = signupForm.querySelector('button[type="submit"]');
-
-            if (submitButton) {
-              const newDiv = document.createElement('div');
-              newDiv.id = 'terms-checkbox-container';
-              newDiv.className = 'mb-4 text-sm text-gray-700';
-
-              const checkbox = document.createElement('input');
-              checkbox.type = 'checkbox';
-              checkbox.id = 'terms-checkbox';
-              checkbox.className = 'mr-2';
-
-              const label = document.createElement('label');
-              label.htmlFor = 'terms-checkbox';
-              label.innerHTML = `I agree to the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Terms and Conditions</a>`;
-
-              newDiv.appendChild(checkbox);
-              newDiv.appendChild(label);
-
-              submitButton.parentNode?.insertBefore(newDiv, submitButton);
-
-              const handleSubmit = (e: Event) => {
-                if (!checkbox.checked) {
-                  e.preventDefault();
-                  setShowTermsError(true);
-                } else {
-                  setShowTermsError(false);
-                }
-              };
-
-              signupForm.addEventListener('submit', handleSubmit);
-
-              observer.disconnect();
-              observer.observe(authUiContainer, { childList: true, subtree: true });
-              return;
-            }
-          } else if (!signupForm && termsCheckboxContainer) {
-            termsCheckboxContainer.remove();
-            setShowTermsError(false);
-          }
-        }
-      }
-    });
-
-    observer.observe(authUiContainer, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, [setShowTermsError]); // setShowTermsError debe estar en el array de dependencias
+//... (el resto de tu código setupAuthUIObserver)
+  }, [setShowTermsError]);
 
   useEffect(() => {
     setupAuthUIObserver();
@@ -121,6 +42,13 @@ export default function LoginPage() {
           Back to Home
         </Link>
       </div>
+
+      {/* Nuevo mensaje de confirmación */}
+      {showMessage && (
+        <div className="w-full max-w-md p-4 mb-4 text-sm text-green-800 bg-green-100 rounded-lg shadow" role="alert">
+          Email confirmed! Please log in to continue.
+        </div>
+      )}
 
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md" id="auth-ui-container">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-4">
