@@ -31,15 +31,18 @@ export default function ImprintPage() {
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Information according to &sect; 5 TMG:</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             Best Quality Solutions GmbH<br />
-            Kieselstra&szlig;e 6<br />
-            D-51371 Leverkusen<br />
+            Niederlassung Marl<br />
+            Elbestraße 10<br />        
+            45768 Marl<br />
             Authorized representative: Frank Wollin
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Contact</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
+            Contact: Frank Wollin, Managing Director<br />
             Phone: +49 (0)173-6995506<br />
-            Email: mail@bqs-gmbh.com<br />
+            Email: frank.wollin@bqs-gmbh.com<br />
+            Phone: (+49) 1736995506<br />
             Fax: +49 (03212) 3927967<br />
             <a href="https://www.bqs-gmbh.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.bqs-gmbh.com</a>
           </p>
