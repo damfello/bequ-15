@@ -30,11 +30,13 @@ export default function ImprintPage() {
         <section className="bg-white p-8 rounded-lg shadow-xl mb-8 border border-gray-300">
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Information according to &sect; 5 TMG:</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
+            Angaben gem. § 5 TMG<br />
             Best Quality Solutions GmbH<br />
-            Niederlassung Marl<br />
-            Elbestraße 10<br />        
-            45768 Marl<br />
-            Authorized representative: Frank Wollin
+            Hauptsitz: Kieselstraße 6<br />
+            D-41371 Leverkusen<br />
+            Niederlassung: Elbestraße 10<br />
+            D-45768 Marl<br />
+            Vertretungsberechtigter Geschäftsführer: Frank Wollin
           </p>
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-900">Contact</h2>
